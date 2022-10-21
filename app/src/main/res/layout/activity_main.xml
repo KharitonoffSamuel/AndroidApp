@@ -14,6 +14,7 @@
         android:layout_marginTop="481dp"
         android:layout_marginEnd="91dp"
         android:layout_marginBottom="32dp"
+        android:onClick="onScanButtonClic"
         android:text="Je scanne mon produit"
         app:layout_constraintBottom_toTopOf="@+id/button_search_product"
         app:layout_constraintEnd_toEndOf="parent"
@@ -29,11 +30,32 @@
         android:layout_marginTop="32dp"
         android:layout_marginEnd="77dp"
         android:layout_marginBottom="282dp"
+        android:onClick="onSearchButtonClic"
         android:text="Je recherche mon produit"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/button_scan_product" />
+
+    <TextView
+        android:id="@+id/appTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="177dp"
+        android:layout_marginTop="47dp"
+        android:layout_marginEnd="141dp"
+        android:layout_marginBottom="320dp"
+        android:background="#32E113"
+        android:backgroundTint="#33E114"
+        android:text="@string/title"
+        android:textColor="#FFFFFF"
+        android:textSize="48sp"
+        app:layout_constraintBottom_toTopOf="@+id/button_scan_product"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.579"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.066" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
