@@ -13,4 +13,9 @@ public class ProductSearch extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_product_search);
     }
+
+    public void productButtonClic (View view){
+        Intent intent = new Intent(this,ProductInfo.class);
+        startActivity(intent);
+    }
 }
