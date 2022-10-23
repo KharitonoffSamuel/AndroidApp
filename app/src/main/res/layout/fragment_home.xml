@@ -33,6 +33,7 @@
         tools:layout_editor_absoluteX="0dp" />
 
     <SearchView
+        android:id="@+id/searchView"
         android:layout_width="171dp"
         android:layout_height="32dp"
         android:layout_marginStart="120dp"
@@ -41,5 +42,14 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView10" />
+
+    <TextView
+        android:id="@+id/stringTest"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="44dp"
+        android:text="TextView"
+        app:layout_constraintTop_toBottomOf="@+id/searchView"
+        tools:layout_editor_absoluteX="0dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,6 +1,7 @@
 package com.example.androidapp;
 
 import android.os.Bundle;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
@@ -31,6 +32,11 @@ public class Accueil extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main_bottom_navigation);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(binding.navView, navController);
+
+        int number = 10;
+        String strMeatFormat = getResources().getString(R.string.stringTest, number);
+        TextView textview = (TextView) findViewById(R.id.stringTest);
+        textview.setText(strMeatFormat);
     }
 
 }
