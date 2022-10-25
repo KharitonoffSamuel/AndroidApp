@@ -35,7 +35,7 @@ public class Accueil extends AppCompatActivity {
 
         int number = 10;
         String strMeatFormat = getResources().getString(R.string.stringTest, number);
-        TextView textview = (TextView) findViewById(R.id.stringTest);
+        TextView textview = findViewById(R.id.stringTest);
         textview.setText(strMeatFormat);
     }
 
