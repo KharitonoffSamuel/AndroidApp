@@ -1,6 +1,7 @@
 package com.example.androidapp.ui.search;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,8 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.androidapp.R;
 import com.example.androidapp.databinding.FragmentDashboardBinding;
+
+import org.w3c.dom.Text;
 
 public class SearchFragment extends Fragment {
 
@@ -28,11 +31,27 @@ public class SearchFragment extends Fragment {
 
         final TextView textView = binding.textDashboard;
         dashboardViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
-        return root;
 
-        //SearchView searchView = new SearchView(R.id.findV)
-        //CharSequence search = (CharSequence);
+        SearchView searchView = binding.searchBar;
+        TextView text_dashboard = binding.textDashboard;
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                text_dashboard.setText(query);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                text_dashboard.setText(newText);
+                return false;
+            }
+        });
+
+        return root;
     }
+
 
     @Override
     public void onDestroyView() {
