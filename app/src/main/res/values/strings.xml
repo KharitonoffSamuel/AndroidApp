@@ -1,9 +1,9 @@
 <resources>
     <string name="app_name">Le Guide du Tri</string>
     <string name="title">Le Guide du Tri</string>
-    <string name="title_activity_main_bottom_navigation">MainActivityBottomNavigation</string>
+    <string name="title_activity_main_bottom_navigation">Le Guide du Tri</string>
     <string name="title_home">Accueil</string>
     <string name="title_search">Rechercher</string>
     <string name="title_scan">Scanner</string>
-    <string name="stringTest">You shot %1$d pounds of meat!</string>
+    <string name="title_info">Info</string>
 </resources>

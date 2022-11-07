@@ -15,6 +15,13 @@
         android:theme="@style/Theme.AndroidApp"
         tools:targetApi="31">
         <activity
+            android:name=".ui.info.ProductInfo"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
             android:name=".ui.scan.ScanActivity"
             android:exported="false"
             android:screenOrientation="portrait"

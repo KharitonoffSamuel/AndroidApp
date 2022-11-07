@@ -12,5 +12,9 @@
         android:id="@+id/navigation_scan"
         android:icon="@drawable/ic_baseline_qr_code_scanner_24"
         android:title="@string/title_scan" />
+    <item
+        android:id="@+id/navigation_info"
+        android:icon="@drawable/ic_baseline_info_24"
+        android:title="@string/title_info" />
 
 </menu>
