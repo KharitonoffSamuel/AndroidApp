@@ -1,0 +1,34 @@
+{
+    "produits": {
+        "3232": {
+            "nom": "Eau",
+            "photo": "https://photo.jpg",
+            "categories": {
+                "bouchon": {
+                    "plastique": true,
+                    "liege": true,
+                    "metaux": true
+                },
+                "couvercle": {
+                    "plastique": true,
+                    "metaux": true
+                },
+                "emballage": {
+                    "plastique": true,
+                    "metaux": true,
+                    "carton": true,
+                    "papier": true
+                },
+                "bouteille": {
+                    "plastique": true,
+                    "metaux": true,
+                    "verre": true
+                },
+                "pot": {
+                    "plastique": true,
+                    "metaux": true
+                }
+            }
+        }
+    }
+}
