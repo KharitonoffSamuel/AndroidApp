@@ -3,7 +3,13 @@ package com.example.androidapp;
 public class Produit {
     private CharSequence code;
     private String nom;
-    private String[] matiere;
+    private String matiere;
+
+    public Produit(CharSequence code, String nom, String matiere) {
+        this.code = code;
+        this.nom = nom;
+        this.matiere = matiere;
+    }
 
     public CharSequence getCode() {
         return code;
@@ -21,11 +27,11 @@ public class Produit {
         this.nom = nom;
     }
 
-    public String[] getMatiere() {
+    public String getMatiere() {
         return matiere;
     }
 
-    public void setMatiere(String[] matiere) {
+    public void setMatiere(String matiere) {
         this.matiere = matiere;
     }
 }

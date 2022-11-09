@@ -3,37 +3,57 @@ package com.example.androidapp.ui.info;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.androidapp.Produit;
 import com.example.androidapp.R;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
 public class ProductInfo extends AppCompatActivity {
 
-    Produit produit = new Produit();
+    String code;
+    String nom = "Volvic";
+    String matiere = "Plastique";
+
+    Produit produit = new Produit(code, nom, matiere);
     TextView messageText;
 
+    //Référence racine de la database
     FirebaseDatabase database = FirebaseDatabase.getInstance("https://androidapp-41f0d-default-rtdb.europe-west1.firebasedatabase.app");
-    DatabaseReference databaseReference = database.getReference();
+    DatabaseReference databaseReferenceProduits = database.getReference().child("Produits");
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_product_info);
+
+        //databaseReferenceProduits.child("Produits").updateChildren(produit);
+        //String key = databaseReferenceProduits.push().getKey();
+
+        EditText codeEditText = (EditText) findViewById(R.id.editTextCode);
+        Button codeButton = (Button) findViewById(R.id.buttonCode);
+
+        //Test du bouton pour créer des catégories - OK, on pourra récupérer le code barre
+        codeButton.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        code = codeEditText.getText().toString();
+                        databaseReferenceProduits.child(code).setValue(produit);
+                    }
+                }
+        );
 
         // referencing and initializing
         // the button and textviews
@@ -64,12 +84,20 @@ public class ProductInfo extends AppCompatActivity {
                 messageText.setText(code);
                 produit.setCode(code);
 
+                sendDatabase();
+
                 //databaseReference.child("Produits").produit.getCode().toString());
-                Log.d("Code barre", "" + produit.getCode().toString());
+                //Log.d("Code barre", "" + produit.getCode().toString());
             }
         } else {
             super.onActivityResult(requestCode, resultCode, data);
         }
+    }
+
+    public void sendDatabase() {
+        //Envoi du code barre
+        //databaseReferenceProduits.child("Code").push().setValue(produit.getCode().toString());
+        //Log.d("Code barre", "" + produit.getCode().toString());
     }
 
         /*FirebaseDatabase database = FirebaseDatabase.getInstance("https://androidapp-41f0d-default-rtdb.europe-west1.firebasedatabase.app");
