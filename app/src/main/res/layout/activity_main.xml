@@ -1,44 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/gradient_background"
     android:orientation="vertical"
+    android:textAlignment="gravity"
     tools:context=".MainActivity">
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/textView2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:letterSpacing="0"
-        android:text="@string/app_name"
+        android:text="TRI'vial"
         android:textAlignment="center"
-        android:textColor="#0E9814"
-        android:textSize="48sp"
-        android:textStyle="bold" />
+        android:textColor="#E5EFE5"
+        android:textSize="96sp" />
 
-    <Button
-        android:id="@+id/buttonAjouter"
+    <TextView
+        android:id="@+id/textView3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:text="Ajouter un produit" />
+        android:background="@drawable/border"
+        android:text="Triez facilement vos déchets en les scannant !"
+        android:textAlignment="center"
+        android:textSize="20sp" />
 
     <Space
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="1" />
+        android:layout_height="12dp" />
+
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="match_parent"
+        android:layout_height="192dp"
+        app:srcCompat="@drawable/accueil_schema" />
 
     <Button
         android:id="@+id/buttonScan"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
+        android:layout_height="60dp"
+        android:drawableLeft="@drawable/ic_baseline_qr_code_scanner_24"
         android:text="Scanner un produit" />
 
-    <Space
+    <Button
+        android:id="@+id/buttonAjouter"
         android:layout_width="match_parent"
-        android:layout_height="103dp"
-        android:layout_weight="1" />
+        android:layout_height="60dp"
+        android:drawableLeft="@drawable/ic_baseline_add_24"
+        android:text="Ajouter un produit" />
+
 </LinearLayout>
