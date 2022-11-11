@@ -5,42 +5,29 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".ui.info.ProductInfo">
+    tools:context="ProductInfo">
 
-    <TextView
-        android:id="@+id/textViewMonth"
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="62dp" />
+
+    <EditText
+        android:id="@+id/editTextNom"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Month" />
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:text="Nom" />
+
+    <TextView
+        android:id="@+id/textViewNom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Nom" />
 
     <Space
         android:layout_width="match_parent"
         android:layout_height="50dp" />
-
-    <TextView
-        android:id="@+id/textViewRainfall"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Rainfall" />
-
-    <Space
-        android:layout_width="match_parent"
-        android:layout_height="50dp" />
-
-    <TextView
-        android:id="@+id/textViewSun"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Sun" />
-
-    <TextView
-        android:id="@+id/textContent"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_margin="10dp"
-        android:text="messageContent"
-        android:textSize="20sp" />
 
     <EditText
         android:id="@+id/editTextCode"
@@ -48,12 +35,46 @@
         android:layout_height="wrap_content"
         android:ems="10"
         android:inputType="textPersonName"
-        android:text="Name" />
+        android:text="Code" />
 
     <Button
-        android:id="@+id/buttonCode"
+        android:id="@+id/buttonScanCode"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Button" />
+        android:text="Scanner le code" />
+
+    <TextView
+        android:id="@+id/textViewCode"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Code" />
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="50dp" />
+
+    <EditText
+        android:id="@+id/editTextMatiere"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:text="Matière" />
+
+    <TextView
+        android:id="@+id/textViewMatiere"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Matière" />
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="53dp" />
+
+    <Button
+        android:id="@+id/buttonValiderNouveauProduit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Valider" />
 
 </LinearLayout>
