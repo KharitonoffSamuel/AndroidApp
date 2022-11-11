@@ -18,13 +18,8 @@
         tools:layout="@layout/fragment_dashboard" />
 
     <activity
-        android:id="@+id/navigation_scan"
-        android:name="com.example.androidapp.ui.scan.ScanActivity"
-        android:label="@string/title_scan"
-        tools:layout="@layout/activity_scan" />
-    <activity
         android:id="@+id/navigation_info"
-        android:name="com.example.androidapp.ui.info.ProductInfo"
+        android:name="com.example.androidapp.ProductInfo"
         android:label="@string/title_info"
         tools:layout="@layout/activity_product_info" />
 </navigation>

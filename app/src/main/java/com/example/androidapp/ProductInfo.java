@@ -1,8 +1,7 @@
-package com.example.androidapp.ui.info;
+package com.example.androidapp;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -12,21 +11,21 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.androidapp.Produit;
-import com.example.androidapp.R;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
-public class ProductInfo extends AppCompatActivity {
+public class ProductInfo extends AppCompatActivity implements View.OnClickListener{
 
     String code;
     String nom = "Volvic";
     String matiere = "Plastique";
 
     Produit produit = new Produit(code, nom, matiere);
-    TextView messageText;
+    private TextView textViewCode, textViewNom, textViewMatiere;
+    private EditText editTextNom, editTextCode, editTextMatiere;
+    private Button boutonScannerCode, boutonValider;
 
     //Référence racine de la database
     FirebaseDatabase database = FirebaseDatabase.getInstance("https://androidapp-41f0d-default-rtdb.europe-west1.firebasedatabase.app");
@@ -41,58 +40,61 @@ public class ProductInfo extends AppCompatActivity {
         //databaseReferenceProduits.child("Produits").updateChildren(produit);
         //String key = databaseReferenceProduits.push().getKey();
 
-        EditText codeEditText = (EditText) findViewById(R.id.editTextCode);
-        Button codeButton = (Button) findViewById(R.id.buttonCode);
+        boutonScannerCode = (Button) findViewById(R.id.buttonScanCode);
+        boutonValider = (Button) findViewById(R.id.buttonValiderNouveauProduit);
+        editTextNom = (EditText) findViewById(R.id.editTextNom);
+        editTextCode = (EditText) findViewById(R.id.editTextCode);
+        textViewCode = (TextView) findViewById(R.id.textViewCode);
 
-        //Test du bouton pour créer des catégories - OK, on pourra récupérer le code barre
-        codeButton.setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        code = codeEditText.getText().toString();
-                        databaseReferenceProduits.child(code).setValue(produit);
-                    }
-                }
-        );
+        boutonScannerCode.setOnClickListener((View.OnClickListener) this);
+        boutonValider.setOnClickListener((View.OnClickListener) this);
+    }
 
-        // referencing and initializing
-        // the button and textviews
-        messageText = findViewById(R.id.textContent);
+    @Override
+    public void onClick(View view) {
+        if (boutonScannerCode.equals(view)) {
+            IntentIntegrator intentIntegrator = new IntentIntegrator(this);
+            intentIntegrator.setPrompt("Scan a barcode or QR Code");
+            intentIntegrator.setOrientationLocked(false);
+            intentIntegrator.initiateScan();
+        }
+        else if (boutonValider.equals(view)) {
+            // Si tous les champs ont été remplis
+            if(editTextNom.getText().toString().length() != 0 && editTextCode.getText().toString().length() != 0) {
+                //On envoie les champs dans les zones et la database
+                produit.setNom(editTextNom.getText().toString());
+                produit.setCode(editTextCode.getText().toString());
+            }
 
-        // we need to create the object
-        // of IntentIntegrator class
-        // which is the class of QR library
-        IntentIntegrator intentIntegrator = new IntentIntegrator(this);
-        intentIntegrator.setPrompt("Scan a barcode or QR Code");
-        intentIntegrator.setOrientationLocked(false);
-        intentIntegrator.initiateScan();
+            databaseReferenceProduits.child(produit.getCode().toString()).setValue(produit);
+            //sendDatabase();
+        }
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         IntentResult intentResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
-        // if the intentResult is null then
-        // toast a message as "cancelled"
+
+        // Si résultat invalide, toast "annulé"
         if (intentResult != null) {
             if (intentResult.getContents() == null) {
-                Toast.makeText(getBaseContext(), "Cancelled", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getBaseContext(), "Annulé", Toast.LENGTH_SHORT).show();
             } else {
-                // if the intentResult is not null we'll set
-                // the content and format of scan message
+                // Résultat non nul
                 CharSequence code = intentResult.getContents();
-                messageText.setText(code);
+                editTextCode.setText(code);
+                textViewCode.setText(code);
                 produit.setCode(code);
-
-                sendDatabase();
-
-                //databaseReference.child("Produits").produit.getCode().toString());
-                //Log.d("Code barre", "" + produit.getCode().toString());
             }
         } else {
             super.onActivityResult(requestCode, resultCode, data);
         }
     }
+
+
+
+
 
     public void sendDatabase() {
         //Envoi du code barre

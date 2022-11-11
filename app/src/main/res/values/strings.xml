@@ -3,7 +3,16 @@
     <string name="title">Le Guide du Tri</string>
     <string name="title_activity_main_bottom_navigation">Le Guide du Tri</string>
     <string name="title_home">Accueil</string>
-    <string name="title_search">Rechercher</string>
-    <string name="title_scan">Scanner</string>
+    <string name="title_search">Rechercher une référence</string>
+    <string name="title_scan">Scanner un produit</string>
     <string name="title_info">Info</string>
+    <string name="title_activity_main">MainActivity</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+
+    <string name="hello_first_fragment">Hello first fragment</string>
+    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
 </resources>
