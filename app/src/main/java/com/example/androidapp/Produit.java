@@ -1,37 +1,40 @@
 package com.example.androidapp;
 
 public class Produit {
-    private CharSequence code;
-    private String nom;
-    private String matiere;
+    private String Code;
+    private String Nom;
+    private String Matiere;
 
-    public Produit(CharSequence code, String nom, String matiere) {
-        this.code = code;
-        this.nom = nom;
-        this.matiere = matiere;
+    public Produit() {
     }
 
-    public CharSequence getCode() {
-        return code;
+    public Produit(String code, String nom, String matiere){
+        Code = code;
+        Nom = nom;
+        Matiere = matiere;
     }
 
-    public void setCode(CharSequence code) {
-        this.code = code;
+    public String getCode() {
+        return Code;
+    }
+
+    public void setCode(String code) {
+        this.Code = code;
     }
 
     public String getNom() {
-        return nom;
+        return Nom;
     }
 
     public void setNom(String nom) {
-        this.nom = nom;
+        this.Nom = nom;
     }
 
     public String getMatiere() {
-        return matiere;
+        return Matiere;
     }
 
     public void setMatiere(String matiere) {
-        this.matiere = matiere;
+        this.Matiere = matiere;
     }
 }
