@@ -16,7 +16,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
-public class ProductInfo extends AppCompatActivity implements View.OnClickListener{
+public class AjoutProduit extends AppCompatActivity implements View.OnClickListener{
 
     String code;
     String nom = "Volvic";
@@ -31,12 +31,12 @@ public class ProductInfo extends AppCompatActivity implements View.OnClickListen
     FirebaseDatabase database = FirebaseDatabase.getInstance("https://androidapp-41f0d-default-rtdb.europe-west1.firebasedatabase.app");
     DatabaseReference databaseReferenceProduits = database.getReference().child("Produits");
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_product_info);
+        setContentView(R.layout.activity_ajout_produit);
 
+        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         //databaseReferenceProduits.child("Produits").updateChildren(produit);
         //String key = databaseReferenceProduits.push().getKey();
 
@@ -85,16 +85,12 @@ public class ProductInfo extends AppCompatActivity implements View.OnClickListen
                 CharSequence code = intentResult.getContents();
                 editTextCode.setText(code);
                 textViewCode.setText(code);
-                produit.setCode(code);
+                produit.setCode(code.toString());
             }
         } else {
             super.onActivityResult(requestCode, resultCode, data);
         }
     }
-
-
-
-
 
     public void sendDatabase() {
         //Envoi du code barre

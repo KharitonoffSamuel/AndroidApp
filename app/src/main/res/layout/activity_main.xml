@@ -37,6 +37,10 @@
         android:layout_height="192dp"
         app:srcCompat="@drawable/accueil_schema" />
 
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="28dp" />
+
     <Button
         android:id="@+id/buttonScan"
         android:layout_width="match_parent"

@@ -1,29 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@drawable/gradient_background"
-    tools:context="ProductInfo">
+    tools:context=".AjoutProduit">
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:soundEffectsEnabled="false"
+        android:text="Ajout de produit"
+        android:textAlignment="center"
+        android:textColor="#DDDDDD"
+        android:textSize="34sp" />
 
     <Space
         android:layout_width="match_parent"
-        android:layout_height="62dp" />
+        android:layout_height="31dp" />
 
     <EditText
         android:id="@+id/editTextNom"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="55dp"
+        android:background="#CBEAAB"
         android:ems="10"
-        android:inputType="textPersonName"
-        android:text="Nom" />
+        android:hint="Nom"
+        android:inputType="textPersonName" />
 
     <TextView
         android:id="@+id/textViewNom"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="55dp"
+        android:background="#CBEAAB"
         android:text="Nom" />
 
     <Space
@@ -33,21 +46,24 @@
     <EditText
         android:id="@+id/editTextCode"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="55dp"
+        android:background="#CBEAAB"
         android:ems="10"
-        android:inputType="textPersonName"
-        android:text="Code" />
+        android:hint="Code"
+        android:inputType="textPersonName" />
 
     <Button
         android:id="@+id/buttonScanCode"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Scanner le code" />
+        android:text="Scanner le code"
+        app:icon="@drawable/ic_baseline_qr_code_scanner_24" />
 
     <TextView
         android:id="@+id/textViewCode"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="55dp"
+        android:background="#CBEAAB"
         android:text="Code" />
 
     <Space
@@ -57,15 +73,17 @@
     <EditText
         android:id="@+id/editTextMatiere"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="55dp"
+        android:background="#CBEAAB"
         android:ems="10"
-        android:inputType="textPersonName"
-        android:text="Matière" />
+        android:hint="Matière"
+        android:inputType="textPersonName" />
 
     <TextView
         android:id="@+id/textViewMatiere"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="55dp"
+        android:background="#CBEAAB"
         android:text="Matière" />
 
     <Space
