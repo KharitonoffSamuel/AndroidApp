@@ -10,6 +10,8 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -17,10 +19,13 @@ import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
 public class AjoutProduit extends AppCompatActivity implements View.OnClickListener{
-
     String code;
     String nom = "Volvic";
     String matiere = "Plastique";
+
+    private RecyclerView recyclerView; // la vue
+    private RecyclerView.Adapter adapter; // l'adaptateur
+    private RecyclerView.LayoutManager layoutManager; // le gesdtionnaire de mise en page
 
     Produit produit = new Produit(code, nom, matiere);
     private TextView textViewCode, textViewNom, textViewMatiere;
@@ -44,10 +49,20 @@ public class AjoutProduit extends AppCompatActivity implements View.OnClickListe
         boutonValider = (Button) findViewById(R.id.buttonValiderNouveauProduit);
         editTextNom = (EditText) findViewById(R.id.editTextNom);
         editTextCode = (EditText) findViewById(R.id.editTextCode);
-        textViewCode = (TextView) findViewById(R.id.textViewCode);
+        editTextMatiere = (EditText) findViewById(R.id.editTextMatiere);
 
         boutonScannerCode.setOnClickListener((View.OnClickListener) this);
         boutonValider.setOnClickListener((View.OnClickListener) this);
+
+        recyclerView = (RecyclerView) findViewById(R.id.recyclerViewMateriaux);
+        recyclerView.setHasFixedSize(true);
+        layoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(layoutManager);
+
+        // http://tvaira.free.fr/dev/android/android-recyclerview.html Pour la Recycler View
+        //List<Produits> emballages = recupererDonnees();
+        //adapter = new SkieurAdapter(skieurs);
+        recyclerView.setAdapter(adapter);
     }
 
     @Override
@@ -84,7 +99,6 @@ public class AjoutProduit extends AppCompatActivity implements View.OnClickListe
                 // Résultat non nul
                 CharSequence code = intentResult.getContents();
                 editTextCode.setText(code);
-                textViewCode.setText(code);
                 produit.setCode(code.toString());
             }
         } else {
