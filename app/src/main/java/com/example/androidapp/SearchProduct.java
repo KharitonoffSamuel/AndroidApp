@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.FirebaseError;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -27,8 +28,6 @@ import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
 public class SearchProduct extends AppCompatActivity implements View.OnClickListener {
-
-    String code, nom, matiere;
 
     private Button buttonScanSearch;
     protected TextView textViewNomSearch, textViewCodeSearch, textViewMatiereSearch;
@@ -68,15 +67,40 @@ public class SearchProduct extends AppCompatActivity implements View.OnClickList
             } else {
                 // Résultat non nul
                 CharSequence code = intentResult.getContents();
-                //textViewCodeSearch.setText(code);
-                //produit.setCode(code.toString());
                 searchProduct(code.toString());
             }
         } else {
             super.onActivityResult(requestCode, resultCode, data);
         }
     }
+
+
     protected void searchProduct(String codeLu){
+        databaseReferenceProduits.child(codeLu).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                    if (dataSnapshot.exists()) {
+                        Produit produit = dataSnapshot.getValue(Produit.class);
+                        Log.d(TAG, "Nom: " + produit.getNom() + ", Code " + produit.getCode());
+                        Log.d("NOM", "" + produit.getNom());
+                        textViewCodeSearch.setText(produit.getCode());
+                        textViewMatiereSearch.setText(produit.getMatiere());
+                        textViewNomSearch.setText(produit.getNom());
+                    } else {
+                        textViewCodeSearch.setText("");
+                        textViewMatiereSearch.setText("");
+                        textViewNomSearch.setText("");
+                        Toast.makeText(getBaseContext(), "Le produit n'existe pas dans la base de données", Toast.LENGTH_SHORT).show();
+                    }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        });
+    }
+
+    /*protected void searchProduct1(String codeLu){
         databaseReferenceProduits.child(codeLu).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -93,5 +117,5 @@ public class SearchProduct extends AppCompatActivity implements View.OnClickList
                 Log.d("ERROR","SEARCH DATABASE");
             }
         });
-    }
+    }*/
 }
