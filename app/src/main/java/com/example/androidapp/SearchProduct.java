@@ -6,12 +6,19 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -67,7 +74,7 @@ public class SearchProduct extends AppCompatActivity implements View.OnClickList
             } else {
                 // Résultat non nul
                 CharSequence code = intentResult.getContents();
-                searchProduct(code.toString());
+                //searchProduct(code.toString());
             }
         } else {
             super.onActivityResult(requestCode, resultCode, data);
@@ -99,6 +106,7 @@ public class SearchProduct extends AppCompatActivity implements View.OnClickList
             }
         });
     }
+
 
     /*protected void searchProduct1(String codeLu){
         databaseReferenceProduits.child(codeLu).addListenerForSingleValueEvent(new ValueEventListener() {
