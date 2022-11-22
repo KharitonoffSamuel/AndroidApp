@@ -91,7 +91,7 @@ public class SearchProduct extends AppCompatActivity implements View.OnClickList
                         Log.d(TAG, "Nom: " + produit.getNom() + ", Code " + produit.getCode());
                         Log.d("NOM", "" + produit.getNom());
                         textViewCodeSearch.setText(produit.getCode());
-                        textViewMatiereSearch.setText(produit.getMatiere());
+                        //textViewMatiereSearch.setText(produit.getMatiere());
                         textViewNomSearch.setText(produit.getNom());
                     } else {
                         textViewCodeSearch.setText("");

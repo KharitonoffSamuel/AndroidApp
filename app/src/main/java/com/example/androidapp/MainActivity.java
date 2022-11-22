@@ -1,29 +1,28 @@
 package com.example.androidapp;
 
-import static android.content.ContentValues.TAG;
-
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.Dialog;
-import android.content.DialogInterface;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -32,13 +31,31 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
+import java.util.ArrayList;
+
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     private Button boutonScan, boutonAjouter, boutonDialogSheet;
     protected TextView nomText, codeText, emballageText;
-    Produit produit = new Produit();
     FirebaseDatabase database = FirebaseDatabase.getInstance("https://androidapp-41f0d-default-rtdb.europe-west1.firebasedatabase.app");
     DatabaseReference databaseReferenceProduits = database.getReference().child("Produits");
+
+    RecyclerView recyclerView;
+    ArrayList<String> emballages;
+    RVAdapter rvAdapter;
+    final String TAG = "MainActivity";
+
+    void initData() {
+        emballages = new ArrayList<>();
+        emballages.add("Bouteille en plastique");
+        emballages.add("Pot en verre");
+        emballages.add("Bouchon en plastique");
+        emballages.add("Bouchon de liège");
+        emballages.add("Carton");
+        emballages.add("Papier");
+        emballages.add("Bouteille en verre");
+        emballages.add("Couvercle en aluminium");
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,11 +109,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         LinearLayout emballageLayout = dialog.findViewById(R.id.emballageLayout);
         LinearLayout rescanLayout = dialog.findViewById(R.id.layoutReScan);
         LinearLayout backHomeLayout = dialog.findViewById(R.id.layoutBackHome);
+        RecyclerView recyclerView = dialog.findViewById(R.id.recyclerViewMateriaux);
 
         nomText = (TextView) findViewById(R.id.textNom);
         codeText = (TextView) findViewById(R.id.textCode);
-        emballageText = (TextView) findViewById(R.id.textEmballage);
-
 
         rescanLayout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -115,6 +131,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 startActivity(intent);
             }
         });
+
+        //prepare list data
+        initData();
+
+        //create RV adapter from data (emballages strings)
+        rvAdapter = new RVAdapter(emballages);
+        Log.d("RVADAPTER",""+recyclerView);
+
+
+        // set adapter to RV
+        recyclerView.setAdapter(rvAdapter);
+
+        // set RV layout: vertical list
+        recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        // RV size doesn't depend on amount of content
+        recyclerView.hasFixedSize();
 
         dialog.show();
         dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);

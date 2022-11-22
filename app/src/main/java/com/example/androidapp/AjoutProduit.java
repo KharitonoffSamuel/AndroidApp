@@ -27,7 +27,7 @@ public class AjoutProduit extends AppCompatActivity implements View.OnClickListe
     private RecyclerView.Adapter adapter; // l'adaptateur
     private RecyclerView.LayoutManager layoutManager; // le gesdtionnaire de mise en page
 
-    Produit produit = new Produit(code, nom, matiere);
+    Produit produit = new Produit(code, nom, new String[]{matiere});
     private TextView textViewCode, textViewNom, textViewMatiere;
     private EditText editTextNom, editTextCode, editTextMatiere;
     private Button boutonScannerCode, boutonValider;
@@ -41,10 +41,6 @@ public class AjoutProduit extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ajout_produit);
 
-        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        //databaseReferenceProduits.child("Produits").updateChildren(produit);
-        //String key = databaseReferenceProduits.push().getKey();
-
         boutonScannerCode = (Button) findViewById(R.id.buttonScanCode);
         boutonValider = (Button) findViewById(R.id.buttonValiderNouveauProduit);
         editTextNom = (EditText) findViewById(R.id.editTextNom);
@@ -53,16 +49,6 @@ public class AjoutProduit extends AppCompatActivity implements View.OnClickListe
 
         boutonScannerCode.setOnClickListener((View.OnClickListener) this);
         boutonValider.setOnClickListener((View.OnClickListener) this);
-
-        recyclerView = (RecyclerView) findViewById(R.id.recyclerViewMateriaux);
-        recyclerView.setHasFixedSize(true);
-        layoutManager = new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(layoutManager);
-
-        // http://tvaira.free.fr/dev/android/android-recyclerview.html Pour la Recycler View
-        //List<Produits> emballages = recupererDonnees();
-        //adapter = new SkieurAdapter(skieurs);
-        recyclerView.setAdapter(adapter);
     }
 
     @Override
