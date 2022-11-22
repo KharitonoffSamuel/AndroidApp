@@ -15,6 +15,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
@@ -35,6 +37,13 @@ public class AjoutProduit extends AppCompatActivity implements View.OnClickListe
     //Référence racine de la database
     FirebaseDatabase database = FirebaseDatabase.getInstance("https://androidapp-41f0d-default-rtdb.europe-west1.firebasedatabase.app");
     DatabaseReference databaseReferenceProduits = database.getReference().child("Produits");
+
+    /*   Storage the picture   */
+    FirebaseStorage storage = FirebaseStorage.getInstance();
+    StorageReference storageRef = storage.getReference();
+    StorageReference imagesRef = storageRef.child("images");
+    StorageReference spaceRef = storageRef.child("images/space.jpg");
+    StorageReference rootRef = spaceRef.getRoot();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
