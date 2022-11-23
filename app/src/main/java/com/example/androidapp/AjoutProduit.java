@@ -22,14 +22,15 @@ import com.google.zxing.integration.android.IntentResult;
 
 public class AjoutProduit extends AppCompatActivity implements View.OnClickListener{
     String code;
-    String nom = "Volvic";
-    String matiere = "Plastique";
+    String nom;
+    String matiere;
+    String image;
 
     private RecyclerView recyclerView; // la vue
     private RecyclerView.Adapter adapter; // l'adaptateur
     private RecyclerView.LayoutManager layoutManager; // le gesdtionnaire de mise en page
 
-    Produit produit = new Produit(code, nom, matiere);
+    Produit produit = new Produit(code, nom, matiere, image);
     private TextView textViewCode, textViewNom, textViewMatiere;
     private EditText editTextNom, editTextCode, editTextMatiere;
     private Button boutonScannerCode, boutonValider;
@@ -81,6 +82,7 @@ public class AjoutProduit extends AppCompatActivity implements View.OnClickListe
             intentIntegrator.setPrompt("Scan a barcode or QR Code");
             intentIntegrator.setOrientationLocked(false);
             intentIntegrator.initiateScan();
+
         }
         else if (boutonValider.equals(view)) {
             // Si tous les champs ont été remplis

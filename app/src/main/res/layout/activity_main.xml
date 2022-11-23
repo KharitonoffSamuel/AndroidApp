@@ -27,19 +27,11 @@
         android:textAlignment="center"
         android:textSize="20sp" />
 
-    <Space
-        android:layout_width="match_parent"
-        android:layout_height="81dp" />
-
     <ImageView
         android:id="@+id/imageView2"
         android:layout_width="match_parent"
         android:layout_height="192dp"
         app:srcCompat="@drawable/accueil_schema" />
-
-    <Space
-        android:layout_width="match_parent"
-        android:layout_height="100dp" />
 
     <Button
         android:id="@+id/buttonScan"
@@ -48,10 +40,6 @@
         android:drawableLeft="@drawable/ic_baseline_qr_code_scanner_24"
         android:text="Scanner un produit"
         android:textSize="20sp" />
-
-    <Space
-        android:layout_width="match_parent"
-        android:layout_height="32dp" />
 
     <Button
         android:id="@+id/buttonAjouter"
