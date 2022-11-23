@@ -19,14 +19,6 @@
         android:textColor="#DDDDDD"
         android:textSize="34sp" />
 
-    <TextView
-        android:id="@+id/textView4"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Ajoutez un produit à notre base de données, s'il n'existe pas encore. Renseignez ci-dessous le nom du produit, son code et les différents emballages qui le composent."
-        android:textColor="#FFEB3B"
-        android:textSize="20sp" />
-
     <Space
         android:layout_width="match_parent"
         android:layout_height="31dp" />
@@ -42,7 +34,7 @@
 
     <Space
         android:layout_width="match_parent"
-        android:layout_height="50dp" />
+        android:layout_height="23dp" />
 
     <EditText
         android:id="@+id/editTextCode"
@@ -60,22 +52,21 @@
         android:text="Scanner le code"
         app:icon="@drawable/ic_baseline_qr_code_scanner_24" />
 
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Emballages"
+        android:textSize="20sp" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerViewEmballages"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
     <Space
         android:layout_width="match_parent"
-        android:layout_height="50dp" />
-
-    <EditText
-        android:id="@+id/editTextMatiere"
-        android:layout_width="match_parent"
-        android:layout_height="55dp"
-        android:background="#CBEAAB"
-        android:ems="10"
-        android:hint="Matière"
-        android:inputType="textPersonName" />
-
-    <Space
-        android:layout_width="match_parent"
-        android:layout_height="53dp" />
+        android:layout_height="24dp" />
 
     <Button
         android:id="@+id/buttonValiderNouveauProduit"

@@ -2,13 +2,14 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@drawable/bottom_sheet_dialog"
-    tools:context=".MainActivity"
     android:id="@+id/bottomsheetdialog_layout"
-    >
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:animateLayoutChanges="true"
+    android:background="@drawable/bottom_sheet_dialog"
+    android:orientation="vertical"
+    tools:context=".MainActivity">
+
 
     <TextView
         android:id="@+id/choosetxt"
@@ -23,116 +24,132 @@
 
     <LinearLayout
         android:id="@+id/layoutNom"
-        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:orientation="horizontal"
         android:padding="8dp">
 
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_baseline_drive_file_rename_outline_24"/>
+            android:src="@drawable/ic_baseline_drive_file_rename_outline_24" />
 
         <TextView
             android:id="@+id/textNom"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Nom du produit"
             android:layout_marginLeft="30dp"
-            android:textSize="16sp"/>
+            android:text="Nom du produit"
+            android:textSize="16sp" />
 
     </LinearLayout>
 
     <LinearLayout
         android:id="@+id/layoutCode"
-        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:orientation="horizontal"
         android:padding="8dp">
 
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_baseline_qr_code_24"/>
+            android:src="@drawable/ic_baseline_qr_code_24" />
 
         <TextView
             android:id="@+id/textCode"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Code du produit"
             android:layout_marginLeft="30dp"
-            android:textSize="16sp"/>
+            android:text="Code du produit"
+            android:textSize="16sp" />
 
     </LinearLayout>
 
     <LinearLayout
         android:id="@+id/emballageLayout"
-        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:orientation="horizontal"
         android:padding="8dp">
 
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_baseline_android_24"/>
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerViewMateriaux"
-            android:layout_width="match_parent"
-            android:layout_height="173dp" />
+            android:src="@drawable/ic_baseline_android_24" />
 
     </LinearLayout>
 
 
     <LinearLayout
         android:id="@+id/layoutReScan"
-        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:orientation="horizontal"
         android:padding="8dp">
 
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_baseline_qr_code_scanner_24"/>
+            android:src="@drawable/ic_baseline_qr_code_scanner_24" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Scanner un nouveau produit"
             android:layout_marginLeft="30dp"
-            android:textSize="16sp"/>
+            android:text="Scanner un nouveau produit"
+            android:textSize="16sp" />
 
     </LinearLayout>
 
     <LinearLayout
         android:id="@+id/layoutBackHome"
-        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:orientation="horizontal"
         android:padding="8dp">
 
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_home_black_24dp"/>
+            android:src="@drawable/ic_home_black_24dp" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Revenir à l'accueil"
             android:layout_marginLeft="30dp"
-            android:textSize="16sp"/>
+            android:text="Revenir à l'accueil"
+            android:textSize="16sp" />
 
 
     </LinearLayout>
 
+    <LinearLayout
+        android:id="@+id/layoutAjout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="8dp">
+
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_baseline_plus_one_24" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="30dp"
+            android:text="Ajouter le produit"
+            android:textSize="16sp" />
+
+    </LinearLayout>
 
 
 </LinearLayout>

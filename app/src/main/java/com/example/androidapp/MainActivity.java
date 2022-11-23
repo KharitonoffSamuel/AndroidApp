@@ -2,11 +2,9 @@ package com.example.androidapp;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.Dialog;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -18,11 +16,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -35,41 +34,25 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private Button boutonScan, boutonAjouter, boutonDialogSheet;
+    private Button boutonScan, boutonAjouter, boutonDialogSheet, boutonAjout;
     protected TextView nomText, codeText, emballageText;
     FirebaseDatabase database = FirebaseDatabase.getInstance("https://androidapp-41f0d-default-rtdb.europe-west1.firebasedatabase.app");
     DatabaseReference databaseReferenceProduits = database.getReference().child("Produits");
 
-    RecyclerView recyclerView;
-    ArrayList<String> emballages;
-    RVAdapter rvAdapter;
-    final String TAG = "MainActivity";
 
-    void initData() {
-        emballages = new ArrayList<>();
-        emballages.add("Bouteille en plastique");
-        emballages.add("Pot en verre");
-        emballages.add("Bouchon en plastique");
-        emballages.add("Bouchon de liège");
-        emballages.add("Carton");
-        emballages.add("Papier");
-        emballages.add("Bouteille en verre");
-        emballages.add("Couvercle en aluminium");
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        boutonScan = (Button) findViewById(R.id.buttonScan);
-        boutonScan.setOnClickListener((View.OnClickListener) this);
+        boutonScan = findViewById(R.id.buttonScan);
+        boutonScan.setOnClickListener(this);
 
-        boutonAjouter = (Button) findViewById(R.id.buttonAjouter);
-        boutonAjouter.setOnClickListener((View.OnClickListener) this);
+        boutonAjouter = findViewById(R.id.buttonAjouter);
+        boutonAjouter.setOnClickListener(this);
 
-        boutonDialogSheet = (Button) findViewById(R.id.buttonTestDialogBottom);
-        boutonDialogSheet.setOnClickListener((View.OnClickListener) this);
+        boutonAjout = findViewById(R.id.buttonAjouter);
 
     }
 
@@ -79,27 +62,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             Intent intent = new Intent(this, AjoutProduit.class);
             startActivity(intent);
         } else if (boutonScan.equals(view)) {
-            //Intent intent = new Intent(this, SearchProduct.class);
-            //startActivity(intent);
-
             //Start QR Scanner
             scan();
         }
-        else if (boutonDialogSheet.equals(view)){
-            showDialog();
-        }
     }
 
+    //Fonction qui lance le scan
     private void scan(){
         IntentIntegrator intentIntegrator = new IntentIntegrator(this);
         intentIntegrator.setPrompt("Scan a barcode or QR Code");
         intentIntegrator.setOrientationLocked(false);
         intentIntegrator.initiateScan();
-
-        showDialog();
     }
 
-    private void showDialog(){
+    private void showDialog(Produit produit){
         final Dialog dialog = new Dialog(this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.bottomsheetdialog_layout);
@@ -109,10 +85,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         LinearLayout emballageLayout = dialog.findViewById(R.id.emballageLayout);
         LinearLayout rescanLayout = dialog.findViewById(R.id.layoutReScan);
         LinearLayout backHomeLayout = dialog.findViewById(R.id.layoutBackHome);
-        RecyclerView recyclerView = dialog.findViewById(R.id.recyclerViewMateriaux);
+        LinearLayout ajoutProduit = dialog.findViewById(R.id.layoutAjout);
 
-        nomText = (TextView) findViewById(R.id.textNom);
-        codeText = (TextView) findViewById(R.id.textCode);
+        nomText = dialog.findViewById(R.id.textNom);
+        codeText = dialog.findViewById(R.id.textCode);
+
+        nomText.setText(produit.getNom());
+        codeText.setText(produit.getCode());
+        Log.d("SHEET", ""+ produit.getNom());
 
         rescanLayout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -125,28 +105,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         backHomeLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(MainActivity.this,"Back Home",Toast.LENGTH_SHORT).show();
-                Intent intent = getIntent();
-                finish();
-                startActivity(intent);
+                dialog.dismiss();
             }
         });
 
-        //prepare list data
-        initData();
-
-        //create RV adapter from data (emballages strings)
-        rvAdapter = new RVAdapter(emballages);
-        Log.d("RVADAPTER",""+recyclerView);
-
-
-        // set adapter to RV
-        recyclerView.setAdapter(rvAdapter);
-
-        // set RV layout: vertical list
-        recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
-        // RV size doesn't depend on amount of content
-        recyclerView.hasFixedSize();
+        ajoutProduit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this,AjoutProduit.class);
+                startActivity(intent);
+            }
+        });
 
         dialog.show();
         dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -181,8 +150,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
                     Produit produit = dataSnapshot.getValue(Produit.class);
-                    Log.d(TAG, "Nom: " + produit.getNom() + ", Code " + produit.getCode());
-                    Log.d("NOM", "" + produit.getNom());
+                    showDialog(produit);
                 } else {
                     Toast.makeText(getBaseContext(), "Le produit n'existe pas dans la base de données", Toast.LENGTH_SHORT).show();
                 }
