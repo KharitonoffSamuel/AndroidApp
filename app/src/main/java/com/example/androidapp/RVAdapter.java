@@ -1,10 +1,12 @@
 package com.example.androidapp;
 
 
+import android.provider.ContactsContract;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
@@ -21,7 +23,7 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.ItemViewHolder> {
 
         public ItemViewHolder(View itemView) {
             super(itemView);
-            checkBox = (CheckBox) itemView.findViewById(R.id.checkBox);
+            checkBox = itemView.findViewById(R.id.checkBox);
         }
     }
 
@@ -41,6 +43,7 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.ItemViewHolder> {
     @Override
     public void onBindViewHolder(ItemViewHolder holder, int position) {
         holder.checkBox.setText(dataList.get(position));
+        //https://www.youtube.com/watch?v=5YFPkFaLcIo
     }
 
     @Override
