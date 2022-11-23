@@ -61,6 +61,10 @@
         android:layout_marginLeft="15dp"
         android:layout_marginTop="70dp"
         android:layout_marginBottom="10dp" />
+    <androidx.camera.view.PreviewView
+        android:id="@+id/viewFinder"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
     <EditText
         android:id="@+id/editTextMatiere"

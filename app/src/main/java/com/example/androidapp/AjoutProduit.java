@@ -83,6 +83,7 @@ public class AjoutProduit extends AppCompatActivity implements View.OnClickListe
             intentIntegrator.setOrientationLocked(false);
             intentIntegrator.initiateScan();
 
+
         }
         else if (boutonValider.equals(view)) {
             // Si tous les champs ont été remplis
@@ -115,6 +116,9 @@ public class AjoutProduit extends AppCompatActivity implements View.OnClickListe
         } else {
             super.onActivityResult(requestCode, resultCode, data);
         }
+        // Tack a picture
+        Intent intent = new Intent(AjoutProduit.this, TakePicture.class);
+        startActivity(intent);
     }
 
     public void sendDatabase() {
