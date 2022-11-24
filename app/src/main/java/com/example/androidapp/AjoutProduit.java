@@ -21,11 +21,13 @@ import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
 import java.util.ArrayList;
+import java.util.List;
 
-public class AjoutProduit extends AppCompatActivity implements View.OnClickListener{
+public class AjoutProduit extends AppCompatActivity implements View.OnClickListener, CheckboxListener {
     String code, nom, matiere;
 
     Produit produit = new Produit(code, nom, matiere);
+    CheckboxListener checkboxListener;
     private TextView textViewCode, textViewNom, textViewMatiere;
     private EditText editTextNom, editTextCode, editTextMatiere;
     private Button boutonScannerCode, boutonValider;
@@ -66,20 +68,7 @@ public class AjoutProduit extends AppCompatActivity implements View.OnClickListe
         boutonScannerCode.setOnClickListener(this);
         boutonValider.setOnClickListener(this);
 
-        //prepare list data
-        initData();
-
-        //create RV adapter from data (emballages strings)
-        rvAdapter = new RVAdapter(emballages);
-
-
-        // set adapter to RV
-        recyclerView.setAdapter(rvAdapter);
-
-        // set RV layout: vertical list
-        recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
-        // RV size doesn't depend on amount of content
-        recyclerView.hasFixedSize();
+        setRecyclerView();
     }
 
     @Override
@@ -129,6 +118,11 @@ public class AjoutProduit extends AppCompatActivity implements View.OnClickListe
         //Log.d("Code barre", "" + produit.getCode().toString());
     }
 
+    @Override
+    public void onCheckboxChange(ArrayList<String> arrayList) {
+        Toast.makeText(this,arrayList.toString(),Toast.LENGTH_SHORT).show();
+    }
+
         /*FirebaseDatabase database = FirebaseDatabase.getInstance("https://androidapp-41f0d-default-rtdb.europe-west1.firebasedatabase.app");
         DatabaseReference databaseReference = database.getReference();
 
@@ -148,4 +142,13 @@ public class AjoutProduit extends AppCompatActivity implements View.OnClickListe
 
             }
         });*/
+
+    private void setRecyclerView(){
+        // RECYCLER VIEW - LISTE EMBALLAGES
+        initData();
+        rvAdapter = new RVAdapter(this.emballages,this,this::onCheckboxChange);
+        recyclerView.setAdapter(rvAdapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        recyclerView.hasFixedSize();
+    }
 }
