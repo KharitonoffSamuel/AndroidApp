@@ -81,6 +81,11 @@
             android:layout_height="wrap_content"
             android:src="@drawable/ic_baseline_android_24" />
 
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerViewEmballages"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
     </LinearLayout>
 
 

@@ -2,6 +2,7 @@ package com.example.androidapp;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.Dialog;
@@ -76,13 +77,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void showDialog(Produit produit){
-        final Dialog dialog = new Dialog(this);
+        Dialog dialog = new Dialog(this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.bottomsheetdialog_layout);
 
-        LinearLayout nomLayout = dialog.findViewById(R.id.layoutNom);
-        LinearLayout codeLayout = dialog.findViewById(R.id.layoutCode);
-        LinearLayout emballageLayout = dialog.findViewById(R.id.emballageLayout);
+        LinearLayout emballagesLayout = dialog.findViewById(R.id.emballageLayout);
         LinearLayout rescanLayout = dialog.findViewById(R.id.layoutReScan);
         LinearLayout backHomeLayout = dialog.findViewById(R.id.layoutBackHome);
         LinearLayout ajoutProduit = dialog.findViewById(R.id.layoutAjout);
@@ -92,7 +91,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         nomText.setText(produit.getNom());
         codeText.setText(produit.getCode());
-        Log.d("SHEET", ""+ produit.getNom());
+
+        RecyclerView recyclerView = dialog.findViewById(R.id.recyclerViewEmballages);
+        RVAdapterAfficheEmballages rvAdapterAfficheEmballages = new RVAdapterAfficheEmballages(produit.getMatiere());
+        recyclerView.setAdapter(rvAdapterAfficheEmballages);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        recyclerView.hasFixedSize();
+
 
         rescanLayout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -135,8 +140,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Toast.makeText(getBaseContext(), "Annulé", Toast.LENGTH_SHORT).show();
             } else {
                 // Résultat non nul
-                CharSequence code = intentResult.getContents();
-                //editTextCode.setText(code);
+                CharSequence code = intentResult.getContents();;
                 searchProduct(code.toString());
             }
         } else {
