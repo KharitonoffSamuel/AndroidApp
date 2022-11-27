@@ -24,7 +24,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AjoutProduit extends AppCompatActivity implements View.OnClickListener, CheckboxListener {
-    String code, nom, matiere;
+    String code, nom;
+    ArrayList<String> matiere;
 
     Produit produit = new Produit(code, nom, matiere);
     CheckboxListener checkboxListener;
@@ -62,7 +63,6 @@ public class AjoutProduit extends AppCompatActivity implements View.OnClickListe
         boutonValider = findViewById(R.id.buttonValiderNouveauProduit);
         editTextNom = findViewById(R.id.editTextNom);
         editTextCode = findViewById(R.id.editTextCode);
-        //editTextMatiere = (EditText) findViewById(R.id.editTextMatiere);
         recyclerView = findViewById(R.id.recyclerViewEmballages);
 
         boutonScannerCode.setOnClickListener(this);
@@ -86,9 +86,7 @@ public class AjoutProduit extends AppCompatActivity implements View.OnClickListe
                 produit.setNom(editTextNom.getText().toString());
                 produit.setCode(editTextCode.getText().toString());
             }
-
             databaseReferenceProduits.child(produit.getCode()).setValue(produit);
-            //sendDatabase();
         }
     }
 
@@ -112,36 +110,11 @@ public class AjoutProduit extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    public void sendDatabase() {
-        //Envoi du code barre
-        //databaseReferenceProduits.child("Code").push().setValue(produit.getCode().toString());
-        //Log.d("Code barre", "" + produit.getCode().toString());
-    }
-
     @Override
     public void onCheckboxChange(ArrayList<String> arrayList) {
         Toast.makeText(this,arrayList.toString(),Toast.LENGTH_SHORT).show();
+        produit.setMatiere(arrayList);
     }
-
-        /*FirebaseDatabase database = FirebaseDatabase.getInstance("https://androidapp-41f0d-default-rtdb.europe-west1.firebasedatabase.app");
-        DatabaseReference databaseReference = database.getReference();
-
-        databaseReference.child("Produits").setValue(produit.getCode());
-        Log.d("Code barre", ""+produit.getInstance().getCode());
-        */
-
-        /*databaseReference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                //String value = snapshot.getValue(String.class);
-                Log.d("Lecture", "Value is: " + snapshot.child("Produits").child("32").child("nom").getValue());
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });*/
 
     private void setRecyclerView(){
         // RECYCLER VIEW - LISTE EMBALLAGES

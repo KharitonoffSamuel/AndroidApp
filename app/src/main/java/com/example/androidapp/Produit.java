@@ -1,11 +1,13 @@
 package com.example.androidapp;
 
+import java.util.ArrayList;
+
 public class Produit {
     private String Code;
     private String Nom;
-    private String Matiere;
+    private ArrayList<String> Matiere;
 
-    public Produit(String code, String nom, String matiere) {
+    public Produit(String code, String nom, ArrayList<String> matiere) {
         Code = code;
         Nom = nom;
         Matiere = matiere;
@@ -29,11 +31,11 @@ public class Produit {
         this.Nom = nom;
     }
 
-    public String getMatiere() {
+    public ArrayList<String> getMatiere() {
         return Matiere;
     }
 
-    public void setMatiere(String matiere) {
+    public void setMatiere(ArrayList<String> matiere) {
         Matiere = matiere;
     }
 }
