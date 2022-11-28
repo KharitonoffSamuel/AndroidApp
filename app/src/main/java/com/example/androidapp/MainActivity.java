@@ -5,7 +5,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -129,6 +131,25 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         dialog.getWindow().setGravity(Gravity.BOTTOM);
     }
 
+    private void showAlertBoxProduitInexistant(){
+        AlertDialog.Builder alert = new AlertDialog.Builder(this);
+            alert.setTitle("Produit inexistant dans la base de données");
+            alert.setMessage("Le produit n'existe pas encore dans la base de données. Souhaitez-vous l'ajouter maintenant ?");
+            alert.setPositiveButton("Oui", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    Intent intent = new Intent(MainActivity.this,AjoutProduit.class);
+                    startActivity(intent);
+                }
+            });
+            alert.setNegativeButton("Non", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                }
+            });
+            alert.create().show();
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -140,7 +161,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Toast.makeText(getBaseContext(), "Annulé", Toast.LENGTH_SHORT).show();
             } else {
                 // Résultat non nul
-                CharSequence code = intentResult.getContents();;
+                CharSequence code = intentResult.getContents();
                 searchProduct(code.toString());
             }
         } else {
@@ -156,7 +177,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     Produit produit = dataSnapshot.getValue(Produit.class);
                     showDialog(produit);
                 } else {
-                    Toast.makeText(getBaseContext(), "Le produit n'existe pas dans la base de données", Toast.LENGTH_SHORT).show();
+                    showAlertBoxProduitInexistant();
                 }
             }
 
