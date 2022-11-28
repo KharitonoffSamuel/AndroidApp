@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:animateLayoutChanges="true"
+    android:background="@drawable/bottom_sheet_dialog">
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="17dp" />
+
+    <TextView
+        android:id="@+id/textView5"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:lineSpacingMultiplier="1.5"
+        android:text="Le produit scanné n'existe pas dans la base de données. Souhaitez-vous le créer ?"
+        android:textAlignment="center"
+        android:textSize="20sp" />
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="22dp" />
+
+    <Button
+        android:id="@+id/buttonNewProduct"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Créer le produit" />
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="13dp" />
+
+    <Button
+        android:id="@+id/buttonBackHome"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Retourner à l'accueil" />
+</LinearLayout>

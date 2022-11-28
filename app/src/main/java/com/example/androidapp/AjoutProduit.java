@@ -1,8 +1,9 @@
 package com.example.androidapp;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -28,11 +29,8 @@ public class AjoutProduit extends AppCompatActivity implements View.OnClickListe
     ArrayList<String> matiere;
 
     Produit produit = new Produit(code, nom, matiere);
-    CheckboxListener checkboxListener;
-    private TextView textViewCode, textViewNom, textViewMatiere;
-    private EditText editTextNom, editTextCode, editTextMatiere;
+    private EditText editTextNom, editTextCode;
     private Button boutonScannerCode, boutonValider;
-    private CheckBox checkBoxBouteillePlastique, checkBoxPotVerre;
 
     //Référence racine de la database
     FirebaseDatabase database = FirebaseDatabase.getInstance("https://androidapp-41f0d-default-rtdb.europe-west1.firebasedatabase.app");
@@ -52,6 +50,11 @@ public class AjoutProduit extends AppCompatActivity implements View.OnClickListe
         emballages.add("Papier");
         emballages.add("Bouteille en verre");
         emballages.add("Couvercle en aluminium");
+        emballages.add("Bouchon de liège");
+        emballages.add("Emballage plastique");
+        emballages.add("Barquette en plastique");
+        emballages.add("Canette en aluminium");
+
     }
 
     @Override
@@ -85,8 +88,12 @@ public class AjoutProduit extends AppCompatActivity implements View.OnClickListe
                 //On envoie les champs dans les zones et la database
                 produit.setNom(editTextNom.getText().toString());
                 produit.setCode(editTextCode.getText().toString());
+
+                databaseReferenceProduits.child(produit.getCode()).setValue(produit);
             }
-            databaseReferenceProduits.child(produit.getCode()).setValue(produit);
+            else{
+                showAlertBoxChampsVides();
+            }
         }
     }
 
@@ -123,5 +130,22 @@ public class AjoutProduit extends AppCompatActivity implements View.OnClickListe
         recyclerView.setAdapter(rvAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         recyclerView.hasFixedSize();
+    }
+
+    private void showAlertBoxChampsVides(){
+        AlertDialog.Builder alert = new AlertDialog.Builder(this);
+        alert.setTitle("Champs vides");
+        alert.setMessage("Certains champs sont vides : merci de renseigner toutes les informations");
+        alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+            }
+        });
+        alert.setNegativeButton("Annuler", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+            }
+        });
+        alert.create().show();
     }
 }

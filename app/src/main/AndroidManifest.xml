@@ -31,7 +31,7 @@
         <activity
             android:name=".AjoutProduit"
             android:exported="false"
-            android:screenOrientation="fullSensor"
+            android:screenOrientation="portrait"
             tools:replace="screenOrientation">
             <meta-data
                 android:name="android.app.lib_name"
