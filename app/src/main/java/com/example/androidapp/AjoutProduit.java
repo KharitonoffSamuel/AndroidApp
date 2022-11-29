@@ -6,9 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -22,7 +20,6 @@ import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class AjoutProduit extends AppCompatActivity implements View.OnClickListener, CheckboxListener {
     String code, nom;
@@ -50,11 +47,9 @@ public class AjoutProduit extends AppCompatActivity implements View.OnClickListe
         emballages.add("Papier");
         emballages.add("Bouteille en verre");
         emballages.add("Couvercle en aluminium");
-        emballages.add("Bouchon de liège");
         emballages.add("Emballage plastique");
         emballages.add("Barquette en plastique");
         emballages.add("Canette en aluminium");
-
     }
 
     @Override
@@ -66,7 +61,7 @@ public class AjoutProduit extends AppCompatActivity implements View.OnClickListe
         boutonValider = findViewById(R.id.buttonValiderNouveauProduit);
         editTextNom = findViewById(R.id.editTextNom);
         editTextCode = findViewById(R.id.editTextCode);
-        recyclerView = findViewById(R.id.recyclerViewEmballages);
+        recyclerView = findViewById(R.id.recyclerViewEmballagesPlastique);
 
         boutonScannerCode.setOnClickListener(this);
         boutonValider.setOnClickListener(this);
@@ -90,6 +85,9 @@ public class AjoutProduit extends AppCompatActivity implements View.OnClickListe
                 produit.setCode(editTextCode.getText().toString());
 
                 databaseReferenceProduits.child(produit.getCode()).setValue(produit);
+                Toast.makeText(getBaseContext(), "Le produit est enregistré !", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(this, MainActivity.class);
+                startActivity(intent);
             }
             else{
                 showAlertBoxChampsVides();
@@ -119,7 +117,6 @@ public class AjoutProduit extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onCheckboxChange(ArrayList<String> arrayList) {
-        Toast.makeText(this,arrayList.toString(),Toast.LENGTH_SHORT).show();
         produit.setMatiere(arrayList);
     }
 
