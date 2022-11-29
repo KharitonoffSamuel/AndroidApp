@@ -37,12 +37,11 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private Button boutonScan, boutonAjouter, boutonDialogSheet, boutonAjout;
+    private Button boutonScan, boutonAjouter, boutonAjout;
     protected TextView nomText, codeText, emballageText;
+    private ArrayList<String> poubelleJaune, poubelleVerte;
     FirebaseDatabase database = FirebaseDatabase.getInstance("https://androidapp-41f0d-default-rtdb.europe-west1.firebasedatabase.app");
     DatabaseReference databaseReferenceProduits = database.getReference().child("Produits");
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,8 +53,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         boutonAjouter = findViewById(R.id.buttonAjouter);
         boutonAjouter.setOnClickListener(this);
-
-        boutonAjout = findViewById(R.id.buttonAjouter);
 
     }
 
@@ -83,7 +80,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.bottomsheetdialog_layout);
 
-        LinearLayout emballagesLayout = dialog.findViewById(R.id.emballageLayout);
+        ArrayList<String> emballageFiltreJaune = new ArrayList<>();
+        ArrayList<String> emballageFiltreVerte = new ArrayList<>();
+        ArrayList<String> emballageFiltreNoire = new ArrayList<>();
+
         LinearLayout rescanLayout = dialog.findViewById(R.id.layoutReScan);
         LinearLayout backHomeLayout = dialog.findViewById(R.id.layoutBackHome);
         LinearLayout ajoutProduit = dialog.findViewById(R.id.layoutAjout);
@@ -94,11 +94,30 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         nomText.setText(produit.getNom());
         codeText.setText(produit.getCode());
 
-        RecyclerView recyclerView = dialog.findViewById(R.id.recyclerViewEmballages);
-        RVAdapterAfficheEmballages rvAdapterAfficheEmballages = new RVAdapterAfficheEmballages(produit.getMatiere());
-        recyclerView.setAdapter(rvAdapterAfficheEmballages);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
-        recyclerView.hasFixedSize();
+
+        RecyclerView recyclerViewJaune = dialog.findViewById(R.id.recyclerViewPoubelleJaune);
+        RecyclerView recyclerViewVerte = dialog.findViewById(R.id.recyclerViewPoubelleVerte);
+        RecyclerView recyclerViewNoire = dialog.findViewById(R.id.recyclerViewPoubelleNoire);
+
+
+        // Filtrage des emballages avec "Papier", "Carton", "Plastique", ...
+        for (int i = 0;i<produit.getMatiere().size();i++){
+            String emballageTest = produit.getMatiere().get(i).toUpperCase(); // Pour la comparaison
+            String emballage = produit.getMatiere().get(i); // Pour l'affichage plus propre
+
+            // POUBELLE JAUNE
+            if(emballageTest.contains(("PLASTIQUE")) || emballageTest.contains("PAPIER") || emballageTest.contains("CARTON") || emballageTest.contains("ALUMINIUM")) {
+                emballageFiltreJaune.add(emballage);
+            }
+            // POUBELLE VERTE
+            else if (emballageTest.contains("VERRE")) emballageFiltreVerte.add(emballage);
+            //POUBELLE ORDURES MENAGERES
+            else emballageFiltreNoire.add(emballage);
+        }
+
+        setRecyclerViews(recyclerViewJaune,emballageFiltreJaune);
+        setRecyclerViews(recyclerViewVerte,emballageFiltreVerte);
+        setRecyclerViews(recyclerViewNoire,emballageFiltreNoire);
 
 
         rescanLayout.setOnClickListener(new View.OnClickListener() {
@@ -186,4 +205,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         });
     }
+
+    protected void setRecyclerViews(RecyclerView recyclerView, ArrayList<String> emballageFiltre){
+        RVAdapterAfficheEmballages rvAdapterAfficheEmballages = new RVAdapterAfficheEmballages(emballageFiltre);
+        recyclerView.setAdapter(rvAdapterAfficheEmballages);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        recyclerView.hasFixedSize();
+    }
+
 }
