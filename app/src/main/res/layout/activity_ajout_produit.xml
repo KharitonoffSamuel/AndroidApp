@@ -16,31 +16,31 @@
         android:soundEffectsEnabled="false"
         android:text="Ajout de produit"
         android:textAlignment="center"
-        android:textColor="#DDDDDD"
+        android:textColor="#FFFFFF"
         android:textSize="34sp" />
-
-    <Space
-        android:layout_width="match_parent"
-        android:layout_height="31dp" />
 
     <EditText
         android:id="@+id/editTextNom"
         android:layout_width="match_parent"
         android:layout_height="55dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="20dp"
         android:background="#CBEAAB"
+        android:backgroundTint="@color/white"
         android:ems="10"
         android:hint="Nom"
         android:inputType="textPersonName" />
-
-    <Space
-        android:layout_width="match_parent"
-        android:layout_height="23dp" />
 
     <EditText
         android:id="@+id/editTextCode"
         android:layout_width="match_parent"
         android:layout_height="55dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
         android:background="#CBEAAB"
+        android:backgroundTint="@color/white"
         android:ems="10"
         android:hint="Code"
         android:inputType="textPersonName" />
@@ -49,8 +49,15 @@
         android:id="@+id/buttonScanCode"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="20dp"
+        android:backgroundTint="#FFFFFF"
         android:text="Scanner le code"
-        app:icon="@drawable/ic_baseline_qr_code_scanner_24" />
+        android:textColor="#4CAF50"
+        app:icon="@drawable/ic_baseline_qr_code_scanner_24"
+        app:iconTint="#4CAF50" />
 
     <TextView
         android:id="@+id/textView4"
@@ -64,14 +71,16 @@
         android:layout_width="match_parent"
         android:layout_height="350dp" />
 
-    <Space
-        android:layout_width="match_parent"
-        android:layout_height="24dp" />
-
     <Button
         android:id="@+id/buttonValiderNouveauProduit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Valider" />
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:backgroundTint="@color/white"
+        android:text="Valider"
+        android:textColor="#E91E63"
+        app:icon="@drawable/ic_baseline_check_24"
+        app:iconTint="#E91E63" />
 
 </LinearLayout>

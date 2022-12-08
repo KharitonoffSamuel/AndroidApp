@@ -150,7 +150,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         dialog.getWindow().setGravity(Gravity.BOTTOM);
     }
 
-    private void showAlertBoxProduitInexistant(){
+    private void showAlertBoxProduitInexistant(String codeLu){
         AlertDialog.Builder alert = new AlertDialog.Builder(this);
             alert.setTitle("Produit inexistant dans la base de données");
             alert.setMessage("Le produit n'existe pas encore dans la base de données. Souhaitez-vous l'ajouter maintenant ?");
@@ -158,6 +158,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
                     Intent intent = new Intent(MainActivity.this,AjoutProduit.class);
+                    intent.putExtra("Code", codeLu);
                     startActivity(intent);
                 }
             });
@@ -196,7 +197,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     Produit produit = dataSnapshot.getValue(Produit.class);
                     showDialog(produit);
                 } else {
-                    showAlertBoxProduitInexistant();
+                    showAlertBoxProduitInexistant(codeLu);
                 }
             }
 

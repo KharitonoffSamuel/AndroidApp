@@ -89,4 +89,14 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.ItemViewHolder>{
         Collections.swap(dataList, firstPosition, secondPosition);
         notifyItemMoved(firstPosition, secondPosition);
     }
+
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return position;
+    }
 }

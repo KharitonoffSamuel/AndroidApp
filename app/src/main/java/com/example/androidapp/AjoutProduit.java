@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -37,19 +38,31 @@ public class AjoutProduit extends AppCompatActivity implements View.OnClickListe
     ArrayList<String> emballages;
     RVAdapter rvAdapter;
 
+    // Tableau des emballages pour la RV
     void initData() {
         emballages = new ArrayList<>();
-        emballages.add("Bouteille en plastique");
-        emballages.add("Pot en verre");
-        emballages.add("Bouchon en plastique");
+        emballages.add("[Plastique] Bouteille");
+        emballages.add("[Plastique] Bouchon");
+        emballages.add("[Plastique] Emballage");
+        emballages.add("[Plastique] Barquette");
+        emballages.add("[Plastique] Flacon");
+
+        emballages.add("[Carton] Boite");
+        emballages.add("[Carton] Brique");
+        emballages.add("[Carton] Barquette");
+        emballages.add("[Papier] Emballage");
+        emballages.add("[Papier] Feuille");
+
+        emballages.add("[Aluminium] Canette");
+        emballages.add("[Métal] Couvercle");
+        emballages.add("[Métal] Boite de conserve");
+        emballages.add("[Aérosol] Aérosol");
+        emballages.add("[Aluminium] Barquette");
+
+        emballages.add("[Verre] Pot ou bocal");
+        emballages.add("[Verre] Bouteille");
+
         emballages.add("Bouchon de liège");
-        emballages.add("Carton");
-        emballages.add("Papier");
-        emballages.add("Bouteille en verre");
-        emballages.add("Couvercle en aluminium");
-        emballages.add("Emballage plastique");
-        emballages.add("Barquette en plastique");
-        emballages.add("Canette en aluminium");
     }
 
     @Override
@@ -65,6 +78,12 @@ public class AjoutProduit extends AppCompatActivity implements View.OnClickListe
 
         boutonScannerCode.setOnClickListener(this);
         boutonValider.setOnClickListener(this);
+
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            String codeBarre = extras.getString("Code");
+            editTextCode.setText(codeBarre);
+        }
 
         setRecyclerView();
     }
@@ -125,7 +144,8 @@ public class AjoutProduit extends AppCompatActivity implements View.OnClickListe
         initData();
         rvAdapter = new RVAdapter(this.emballages,this,this::onCheckboxChange);
         recyclerView.setAdapter(rvAdapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        //recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
         recyclerView.hasFixedSize();
     }
 
@@ -138,11 +158,11 @@ public class AjoutProduit extends AppCompatActivity implements View.OnClickListe
             public void onClick(DialogInterface dialogInterface, int i) {
             }
         });
-        alert.setNegativeButton("Annuler", new DialogInterface.OnClickListener() {
+        /*alert.setNegativeButton("Annuler", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
             }
-        });
+        });*/
         alert.create().show();
     }
 }
