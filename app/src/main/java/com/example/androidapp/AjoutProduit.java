@@ -1,15 +1,17 @@
 package com.example.androidapp;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -20,24 +22,22 @@ import com.google.firebase.storage.StorageReference;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
-public class AjoutProduit extends AppCompatActivity implements View.OnClickListener{
-    String code;
-    String nom;
-    String matiere;
-    String image;
 
-    private RecyclerView recyclerView; // la vue
-    private RecyclerView.Adapter adapter; // l'adaptateur
-    private RecyclerView.LayoutManager layoutManager; // le gesdtionnaire de mise en page
+import java.util.ArrayList;
+
+public class AjoutProduit extends AppCompatActivity implements View.OnClickListener, CheckboxListener {
+    String code, nom, image;
+    ArrayList<String> matiere;
+
 
     Produit produit = new Produit(code, nom, matiere, image);
-    private TextView textViewCode, textViewNom, textViewMatiere;
-    private EditText editTextNom, editTextCode, editTextMatiere;
+    private EditText editTextNom, editTextCode;
     private Button boutonScannerCode, boutonValider;
 
     //Référence racine de la database
     FirebaseDatabase database = FirebaseDatabase.getInstance("https://androidapp-41f0d-default-rtdb.europe-west1.firebasedatabase.app");
     DatabaseReference databaseReferenceProduits = database.getReference().child("Produits");
+
 
     /*   Storage the picture   */
     FirebaseStorage storage = FirebaseStorage.getInstance();
@@ -46,33 +46,59 @@ public class AjoutProduit extends AppCompatActivity implements View.OnClickListe
     StorageReference spaceRef = storageRef.child("images/space.jpg");
     StorageReference rootRef = spaceRef.getRoot();
 
+    RecyclerView recyclerView;
+    ArrayList<String> emballages;
+    RVAdapter rvAdapter;
+
+    // Tableau des emballages pour la RV
+    void initData() {
+        emballages = new ArrayList<>();
+        emballages.add("[Plastique] Bouteille");
+        emballages.add("[Plastique] Bouchon");
+        emballages.add("[Plastique] Emballage");
+        emballages.add("[Plastique] Barquette");
+        emballages.add("[Plastique] Flacon");
+
+        emballages.add("[Carton] Boite");
+        emballages.add("[Carton] Brique");
+        emballages.add("[Carton] Barquette");
+        emballages.add("[Papier] Emballage");
+        emballages.add("[Papier] Feuille");
+
+        emballages.add("[Aluminium] Canette");
+        emballages.add("[Métal] Couvercle");
+        emballages.add("[Métal] Boite de conserve");
+        emballages.add("[Aérosol] Aérosol");
+        emballages.add("[Aluminium] Barquette");
+
+        emballages.add("[Verre] Pot ou bocal");
+        emballages.add("[Verre] Bouteille");
+
+        emballages.add("Bouchon de liège");
+    }
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ajout_produit);
 
-        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        //databaseReferenceProduits.child("Produits").updateChildren(produit);
-        //String key = databaseReferenceProduits.push().getKey();
+        boutonScannerCode = findViewById(R.id.buttonScanCode);
+        boutonValider = findViewById(R.id.buttonValiderNouveauProduit);
+        editTextNom = findViewById(R.id.editTextNom);
+        editTextCode = findViewById(R.id.editTextCode);
+        recyclerView = findViewById(R.id.recyclerViewEmballagesPlastique);
 
-        boutonScannerCode = (Button) findViewById(R.id.buttonScanCode);
-        boutonValider = (Button) findViewById(R.id.buttonValiderNouveauProduit);
-        editTextNom = (EditText) findViewById(R.id.editTextNom);
-        editTextCode = (EditText) findViewById(R.id.editTextCode);
-        editTextMatiere = (EditText) findViewById(R.id.editTextMatiere);
+        boutonScannerCode.setOnClickListener(this);
+        boutonValider.setOnClickListener(this);
 
-        boutonScannerCode.setOnClickListener((View.OnClickListener) this);
-        boutonValider.setOnClickListener((View.OnClickListener) this);
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            String codeBarre = extras.getString("Code");
+            editTextCode.setText(codeBarre);
+        }
 
-        recyclerView = (RecyclerView) findViewById(R.id.recyclerViewMateriaux);
-        recyclerView.setHasFixedSize(true);
-        layoutManager = new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(layoutManager);
-
-        // http://tvaira.free.fr/dev/android/android-recyclerview.html Pour la Recycler View
-        //List<Produits> emballages = recupererDonnees();
-        //adapter = new SkieurAdapter(skieurs);
-        recyclerView.setAdapter(adapter);
+        setRecyclerView();
     }
 
     @Override
@@ -91,10 +117,15 @@ public class AjoutProduit extends AppCompatActivity implements View.OnClickListe
                 //On envoie les champs dans les zones et la database
                 produit.setNom(editTextNom.getText().toString());
                 produit.setCode(editTextCode.getText().toString());
-            }
 
-            databaseReferenceProduits.child(produit.getCode().toString()).setValue(produit);
-            //sendDatabase();
+                databaseReferenceProduits.child(produit.getCode()).setValue(produit);
+                Toast.makeText(getBaseContext(), "Le produit est enregistré !", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(this, MainActivity.class);
+                startActivity(intent);
+            }
+            else{
+                showAlertBoxChampsVides();
+            }
         }
     }
 
@@ -121,29 +152,35 @@ public class AjoutProduit extends AppCompatActivity implements View.OnClickListe
         startActivity(intent);
     }
 
-    public void sendDatabase() {
-        //Envoi du code barre
-        //databaseReferenceProduits.child("Code").push().setValue(produit.getCode().toString());
-        //Log.d("Code barre", "" + produit.getCode().toString());
+    @Override
+    public void onCheckboxChange(ArrayList<String> arrayList) {
+        produit.setMatiere(arrayList);
     }
 
-        /*FirebaseDatabase database = FirebaseDatabase.getInstance("https://androidapp-41f0d-default-rtdb.europe-west1.firebasedatabase.app");
-        DatabaseReference databaseReference = database.getReference();
+    private void setRecyclerView(){
+        // RECYCLER VIEW - LISTE EMBALLAGES
+        initData();
+        rvAdapter = new RVAdapter(this.emballages,this,this::onCheckboxChange);
+        recyclerView.setAdapter(rvAdapter);
+        //recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
+        recyclerView.hasFixedSize();
+    }
 
-        databaseReference.child("Produits").setValue(produit.getCode());
-        Log.d("Code barre", ""+produit.getInstance().getCode());
-        */
-
-        /*databaseReference.addValueEventListener(new ValueEventListener() {
+    private void showAlertBoxChampsVides(){
+        AlertDialog.Builder alert = new AlertDialog.Builder(this);
+        alert.setTitle("Champs vides");
+        alert.setMessage("Certains champs sont vides : merci de renseigner toutes les informations");
+        alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                //String value = snapshot.getValue(String.class);
-                Log.d("Lecture", "Value is: " + snapshot.child("Produits").child("32").child("nom").getValue());
+            public void onClick(DialogInterface dialogInterface, int i) {
             }
-
+        });
+        /*alert.setNegativeButton("Annuler", new DialogInterface.OnClickListener() {
             @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
+            public void onClick(DialogInterface dialogInterface, int i) {
             }
         });*/
+        alert.create().show();
+    }
 }

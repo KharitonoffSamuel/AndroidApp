@@ -47,11 +47,11 @@ public class SearchProduct extends AppCompatActivity implements View.OnClickList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_product);
 
-        buttonScanSearch = (Button) findViewById(R.id.buttonSearchScan);
-        buttonScanSearch.setOnClickListener((View.OnClickListener) this);
-        textViewCodeSearch = (TextView) findViewById(R.id.textViewCodeSearch);
-        textViewNomSearch = (TextView) findViewById(R.id.textViewNomSearch);
-        textViewMatiereSearch = (TextView) findViewById(R.id.textViewMatiereSearch);
+        buttonScanSearch = findViewById(R.id.buttonSearchScan);
+        buttonScanSearch.setOnClickListener(this);
+        textViewCodeSearch = findViewById(R.id.textViewCodeSearch);
+        textViewNomSearch = findViewById(R.id.textViewNomSearch);
+        textViewMatiereSearch = findViewById(R.id.textViewMatiereSearch);
     }
 
     @Override
@@ -91,7 +91,7 @@ public class SearchProduct extends AppCompatActivity implements View.OnClickList
                         Log.d(TAG, "Nom: " + produit.getNom() + ", Code " + produit.getCode());
                         Log.d("NOM", "" + produit.getNom());
                         textViewCodeSearch.setText(produit.getCode());
-                        textViewMatiereSearch.setText(produit.getMatiere());
+                        //textViewMatiereSearch.setText(produit.getMatiere());
                         textViewNomSearch.setText(produit.getNom());
                     } else {
                         textViewCodeSearch.setText("");

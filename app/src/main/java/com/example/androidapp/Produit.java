@@ -1,14 +1,19 @@
 package com.example.androidapp;
 
+import java.util.ArrayList;
+
 public class Produit {
     private String Code;
     private String Nom;
-    private String Matiere;
     private String Image;
+
     public Produit() {
     }
 
-    public Produit(String code, String nom, String matiere,String image){
+
+    private ArrayList<String> Matiere;
+
+    public Produit(String code, String nom, ArrayList<String> matiere, String image) {
         Code = code;
         Nom = nom;
         Matiere = matiere;
@@ -33,11 +38,11 @@ public class Produit {
 
     public void setImage(String image){this.Image = image;}
 
-    public String getMatiere() {
+    public ArrayList<String> getMatiere() {
         return Matiere;
     }
 
-    public void setMatiere(String matiere) {
-        this.Matiere = matiere;
+    public void setMatiere(ArrayList<String> matiere) {
+        Matiere = matiere;
     }
 }
