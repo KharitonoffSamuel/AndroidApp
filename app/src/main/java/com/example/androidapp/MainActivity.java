@@ -31,8 +31,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.tasks.OnCanceledListener;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -47,7 +49,11 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
+import java.sql.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -60,7 +66,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     SearchView searchView;
     ListView listView;
-    ArrayList<String> list;
     ArrayAdapter<String > adapter;
 
     @Override
@@ -78,9 +83,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View view) {
         if (boutonAjouter.equals(view)) {
-            Intent intent = new Intent(this, AjoutProduit.class);
-            startActivity(intent);
-            //showDialogSearch();
+            //Intent intent = new Intent(this, AjoutProduit.class);
+            //startActivity(intent);
+            showDialogSearch();
         } else if (boutonScan.equals(view)) {
             //Start QR Scanner
             scan();
@@ -170,7 +175,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         dialog.getWindow().setGravity(Gravity.BOTTOM);
     }
 
-    private void showDialogSearch(){
+    protected void showDialogSearch(){
         Dialog dialog = new Dialog(this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.bottomsheetdialogsearch_layout);
@@ -178,33 +183,38 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         searchView = (SearchView) dialog.findViewById(R.id.searchView);
         listView = (ListView) dialog.findViewById(R.id.lv1);
 
-        list = new ArrayList<>();
-        list.add("Apple");
-        list.add("Banana");
-        list.add("Pineapple");
-        list.add("Orange");
-        list.add("Lychee");
-        list.add("Gavava");
-        list.add("Peech");
-        list.add("Melon");
-        list.add("Watermelon");
-        list.add("Papaya");
-
-
-        adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, list);
-        listView.setAdapter(adapter);
-
-
-        /*searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
                 return false;
             }
 
             @Override
-            public boolean onQueryTextChange(String newText) {
-                //    adapter.getFilter().filter(newText);
+            public boolean onQueryTextChange(String query) {
+                ArrayList<String> list = new ArrayList<>();
+                ArrayList<String> listFiltre = new ArrayList<>();
+                db.collection("Produits")
+                        .get()
+                        .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                           @Override
+                            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                                for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                                    Produit produit = documentSnapshot.toObject(Produit.class);
+                                    Log.d("TAILLE", "onSuccess: " + list.size());
+                                }
+                                    for(int i=0;i<list.size();i++) {
+                                        if(list.get(i).indexOf(query) != -1){
+                                            listFiltre.add(list.get(i));
+                                        }
+                                    }
+                                    adapter = new ArrayAdapter<String>(dialog.getContext(), android.R.layout.simple_list_item_1, listFiltre);
+                                    listView.setAdapter(adapter);
+
+                            }
+                        });
                 return false;
             }
-        });*/
+        });
 
         dialog.show();
         dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
