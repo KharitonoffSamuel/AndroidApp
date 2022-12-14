@@ -1,5 +1,7 @@
 package com.example.androidapp;
 
+import static androidx.appcompat.widget.ResourceManagerInternal.get;
+
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
@@ -7,6 +9,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -19,17 +22,28 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
+import androidx.lifecycle.ViewTreeLifecycleOwner;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.tasks.OnCanceledListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
@@ -40,6 +54,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Button boutonScan, boutonAjouter, boutonAjout;
     protected TextView nomText, codeText, emballageText;
     private ArrayList<String> poubelleJaune, poubelleVerte;
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
     FirebaseDatabase database = FirebaseDatabase.getInstance("https://androidapp-41f0d-default-rtdb.europe-west1.firebasedatabase.app");
     DatabaseReference databaseReferenceProduits = database.getReference().child("Produits");
 
@@ -63,9 +78,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View view) {
         if (boutonAjouter.equals(view)) {
-            //Intent intent = new Intent(this, AjoutProduit.class);
-            //startActivity(intent);
-            showDialogSearch();
+            Intent intent = new Intent(this, AjoutProduit.class);
+            startActivity(intent);
+            //showDialogSearch();
         } else if (boutonScan.equals(view)) {
             //Start QR Scanner
             scan();
@@ -180,11 +195,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         listView.setAdapter(adapter);
 
 
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-
-                Log.d("FILTRE", "onQueryTextSubmit: "+databaseReferenceProduits.orderByChild("nom").startAt("Co").endAt("Co"+"uf8ff").get());
+        /*searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
                 return false;
             }
 
@@ -193,7 +204,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 //    adapter.getFilter().filter(newText);
                 return false;
             }
-        });
+        });*/
 
         dialog.show();
         dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -241,23 +252,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    protected void searchProduct(String codeLu){
-        databaseReferenceProduits.child(codeLu).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()) {
-                    Produit produit = dataSnapshot.getValue(Produit.class);
-                    showDialogInfosProduit(produit);
-                } else {
-                    showAlertBoxProduitInexistant(codeLu);
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-            }
-        });
+    public void searchProduct(String codeLu) {
+        db.collection("Produits")
+                .whereEqualTo("code", codeLu)
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        Produit produit = new Produit();
+                        for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                            produit = documentSnapshot.toObject(Produit.class);
+                            showDialogInfosProduit(produit);
+                        }
+                        if(produit.getNom() == null) showAlertBoxProduitInexistant(codeLu);
+                    }
+                });
     }
+
+
 
     protected void setRecyclerViews(RecyclerView recyclerView, ArrayList<String> emballageFiltre){
         RVAdapterAfficheEmballages rvAdapterAfficheEmballages = new RVAdapterAfficheEmballages(emballageFiltre);
