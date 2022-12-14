@@ -106,24 +106,4 @@ public class SearchProduct extends AppCompatActivity implements View.OnClickList
             }
         });
     }
-
-
-    /*protected void searchProduct1(String codeLu){
-        databaseReferenceProduits.child(codeLu).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                Produit produit = dataSnapshot.getValue(Produit.class);
-                Log.d(TAG, "Nom: " + produit.getNom() + ", Code " + produit.getCode());
-                Log.d("NOM", "" + produit.getNom());
-                textViewCodeSearch.setText(produit.getCode());
-                textViewMatiereSearch.setText(produit.getMatiere());
-                textViewNomSearch.setText(produit.getNom());
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Log.d("ERROR","SEARCH DATABASE");
-            }
-        });
-    }*/
 }

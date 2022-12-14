@@ -1,10 +1,5 @@
 package com.example.androidapp;
 
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
@@ -14,17 +9,22 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.material.bottomsheet.BottomSheetBehavior;
-import com.google.android.material.bottomsheet.BottomSheetDialog;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -43,6 +43,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     FirebaseDatabase database = FirebaseDatabase.getInstance("https://androidapp-41f0d-default-rtdb.europe-west1.firebasedatabase.app");
     DatabaseReference databaseReferenceProduits = database.getReference().child("Produits");
 
+    SearchView searchView;
+    ListView listView;
+    ArrayList<String> list;
+    ArrayAdapter<String > adapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,14 +58,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         boutonAjouter = findViewById(R.id.buttonAjouter);
         boutonAjouter.setOnClickListener(this);
-
     }
 
     @Override
     public void onClick(View view) {
         if (boutonAjouter.equals(view)) {
-            Intent intent = new Intent(this, AjoutProduit.class);
-            startActivity(intent);
+            //Intent intent = new Intent(this, AjoutProduit.class);
+            //startActivity(intent);
+            showDialogSearch();
         } else if (boutonScan.equals(view)) {
             //Start QR Scanner
             scan();
@@ -75,7 +80,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         intentIntegrator.initiateScan();
     }
 
-    private void showDialog(Produit produit){
+    private void showDialogInfosProduit(Produit produit){
         Dialog dialog = new Dialog(this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.bottomsheetdialog_layout);
@@ -150,6 +155,53 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         dialog.getWindow().setGravity(Gravity.BOTTOM);
     }
 
+    private void showDialogSearch(){
+        Dialog dialog = new Dialog(this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.bottomsheetdialogsearch_layout);
+
+        searchView = (SearchView) dialog.findViewById(R.id.searchView);
+        listView = (ListView) dialog.findViewById(R.id.lv1);
+
+        list = new ArrayList<>();
+        list.add("Apple");
+        list.add("Banana");
+        list.add("Pineapple");
+        list.add("Orange");
+        list.add("Lychee");
+        list.add("Gavava");
+        list.add("Peech");
+        list.add("Melon");
+        list.add("Watermelon");
+        list.add("Papaya");
+
+
+        adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, list);
+        listView.setAdapter(adapter);
+
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+
+                Log.d("FILTRE", "onQueryTextSubmit: "+databaseReferenceProduits.orderByChild("nom").startAt("Co").endAt("Co"+"uf8ff").get());
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                //    adapter.getFilter().filter(newText);
+                return false;
+            }
+        });
+
+        dialog.show();
+        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+        dialog.getWindow().setGravity(Gravity.BOTTOM);
+    }
+
     private void showAlertBoxProduitInexistant(String codeLu){
         AlertDialog.Builder alert = new AlertDialog.Builder(this);
             alert.setTitle("Produit inexistant dans la base de données");
@@ -195,7 +247,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
                     Produit produit = dataSnapshot.getValue(Produit.class);
-                    showDialog(produit);
+                    showDialogInfosProduit(produit);
                 } else {
                     showAlertBoxProduitInexistant(codeLu);
                 }
