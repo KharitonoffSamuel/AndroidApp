@@ -57,7 +57,7 @@ import java.util.Set;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private Button boutonScan, boutonAjouter, boutonAjout;
+    private Button boutonScan, boutonAjouter, boutonRecherche;
     protected TextView nomText, codeText, emballageText;
     private ArrayList<String> poubelleJaune, poubelleVerte;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -78,17 +78,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         boutonAjouter = findViewById(R.id.buttonAjouter);
         boutonAjouter.setOnClickListener(this);
+
+        boutonRecherche = findViewById(R.id.buttonRecherche);
+        boutonRecherche.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View view) {
         if (boutonAjouter.equals(view)) {
-            //Intent intent = new Intent(this, AjoutProduit.class);
-            //startActivity(intent);
-            showDialogSearch();
+            Intent intent = new Intent(this, AjoutProduit.class);
+            startActivity(intent);
         } else if (boutonScan.equals(view)) {
             //Start QR Scanner
             scan();
+        }
+        else if(boutonRecherche.equals(view)){
+            showDialogSearch();
         }
     }
 

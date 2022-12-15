@@ -43,6 +43,14 @@
         android:textSize="20sp" />
 
     <Button
+        android:id="@+id/buttonRecherche"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:drawableLeft="@drawable/ic_baseline_search_24"
+        android:text="Rechercher un produit"
+        android:textSize="20sp" />
+
+    <Button
         android:id="@+id/buttonAjouter"
         android:layout_width="match_parent"
         android:layout_height="80dp"
