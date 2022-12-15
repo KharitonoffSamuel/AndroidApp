@@ -4,6 +4,7 @@ import static androidx.appcompat.widget.ResourceManagerInternal.get;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
@@ -15,6 +16,8 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -52,6 +55,7 @@ import com.google.zxing.integration.android.IntentResult;
 import java.sql.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -185,10 +189,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.bottomsheetdialogsearch_layout);
 
+        final InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+
         searchView = (SearchView) dialog.findViewById(R.id.searchView);
+        searchView.setIconified(false);
         listView = (ListView) dialog.findViewById(R.id.lv1);
 
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+        searchView.setOnQueryTextListener (new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 return false;
@@ -205,17 +213,40 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                                 for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
                                     Produit produit = documentSnapshot.toObject(Produit.class);
-                                    list.add(produit.getNom());
-                                    Log.d("TAILLE", "onSuccess: " + list.size());
+                                    list.add(produit.getNom().toLowerCase());
+                                    Collections.sort(list); //Ordre alphabétique
                                 }
                                     for(int i=0;i<list.size();i++) {
                                         if(list.get(i).indexOf(query) != -1){
+                                            //listFiltre.add(list.get(i).substring(0,1).toUpperCase()+list.get(i).substring(1));
                                             listFiltre.add(list.get(i));
                                         }
                                     }
                                     adapter = new ArrayAdapter<String>(dialog.getContext(), android.R.layout.simple_list_item_1, listFiltre);
                                     listView.setAdapter(adapter);
-
+                                    /*listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                        @Override
+                                        public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                                            dialog.dismiss();
+                                            final InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                                            imm.hideSoftInputFromInputMethod(view.getWindowToken(), 0);
+                                            db.collection("Produits")
+                                                    .get()
+                                                    .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                                                        @Override
+                                                        public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                                                            Toast.makeText(getBaseContext(), list.get(i), Toast.LENGTH_SHORT).show();
+                                                            for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                                                                Produit produit = documentSnapshot.toObject(Produit.class);
+                                                                list.add(produit.getNom());
+                                                                if(list.get(i).indexOf(query) != -1){
+                                                                    showDialogInfosProduit(produit);
+                                                                }
+                                                            }
+                                                        }
+                                                    });
+                                        }
+                                    });*/
                             }
                         });
                 return false;
