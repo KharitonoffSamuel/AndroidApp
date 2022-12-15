@@ -205,6 +205,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                                 for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
                                     Produit produit = documentSnapshot.toObject(Produit.class);
+                                    list.add(produit.getNom());
                                     Log.d("TAILLE", "onSuccess: " + list.size());
                                 }
                                     for(int i=0;i<list.size();i++) {

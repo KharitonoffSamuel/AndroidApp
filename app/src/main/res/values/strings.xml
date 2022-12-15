@@ -1,7 +1,7 @@
 <resources>
-    <string name="app_name">Le Guide du Tri</string>
-    <string name="title">Le Guide du Tri</string>
-    <string name="title_activity_main_bottom_navigation">Le Guide du Tri</string>
+    <string name="app_name">Trivial</string>
+    <string name="title">Trivial</string>
+    <string name="title_activity_main_bottom_navigation">Trivial</string>
     <string name="title_home">Accueil</string>
     <string name="title_search">Rechercher une référence</string>
     <string name="title_scan">Scanner un produit</string>
