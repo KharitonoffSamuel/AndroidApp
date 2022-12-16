@@ -23,39 +23,59 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/border"
-        android:text="Triez facilement vos déchets en les scannant !"
-        android:textAlignment="center"
-        android:textSize="20sp" />
+        android:text="M'enfin ! C'est trivial de trier vos déchets, avec TRI'VIAL !"
+        android:textAlignment="viewStart"
+        android:textSize="21sp"
+        android:textStyle="italic" />
 
 
     <ImageView
         android:id="@+id/imageView2"
         android:layout_width="match_parent"
-        android:layout_height="192dp"
+        android:layout_height="223dp"
+        android:layout_marginTop="30dp"
         app:srcCompat="@drawable/accueil_schema" />
 
     <Button
         android:id="@+id/buttonScan"
         android:layout_width="match_parent"
         android:layout_height="80dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="50dp"
+        android:layout_marginRight="10dp"
+        android:backgroundTint="#FFFFFF"
         android:drawableLeft="@drawable/ic_baseline_qr_code_scanner_24"
         android:text="Scanner un produit"
+        android:textColor="#4CAF50"
         android:textSize="20sp" />
 
     <Button
         android:id="@+id/buttonRecherche"
         android:layout_width="match_parent"
         android:layout_height="80dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginRight="10dp"
+        android:backgroundTint="#FAF5F5"
         android:drawableLeft="@drawable/ic_baseline_search_24"
+        android:drawableTint="#100F0F"
         android:text="Rechercher un produit"
+        android:textColor="#4CAF50"
         android:textSize="20sp" />
 
     <Button
         android:id="@+id/buttonAjouter"
         android:layout_width="match_parent"
         android:layout_height="80dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginRight="10dp"
+        android:backgroundTint="#FFFFFF"
         android:drawableLeft="@drawable/ic_baseline_add_24"
+        android:shadowColor="#C84C4C"
         android:text="Ajouter un produit"
-        android:textSize="20sp" />
+        android:textColor="#4CAF50"
+        android:textSize="20sp"
+        app:strokeColor="#2196F3" />
 
 </LinearLayout>
