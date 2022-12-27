@@ -134,28 +134,6 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/layoutReScan"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:orientation="horizontal"
-        android:padding="8dp">
-
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_baseline_qr_code_scanner_24" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="30dp"
-            android:text="Scanner un nouveau produit"
-            android:textSize="16sp" />
-
-    </LinearLayout>
-
-    <LinearLayout
         android:id="@+id/layoutBackHome"
         android:layout_width="match_parent"
         android:layout_height="50dp"
@@ -175,28 +153,6 @@
             android:text="Revenir à l'accueil"
             android:textSize="16sp" />
 
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/layoutAjout"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:orientation="horizontal"
-        android:padding="8dp">
-
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_baseline_plus_one_24" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="30dp"
-            android:text="Ajouter le produit"
-            android:textSize="16sp" />
 
     </LinearLayout>
 

@@ -1,7 +1,5 @@
 package com.example.androidapp;
 
-import static androidx.appcompat.widget.ResourceManagerInternal.get;
-
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
@@ -10,8 +8,6 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.provider.ContactsContract;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,58 +21,47 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
-import androidx.lifecycle.ViewTreeLifecycleOwner;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.gms.tasks.OnCanceledListener;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
-import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
-import java.sql.Array;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
+    // Boutons et éléments graphiques d'interface
     private Button boutonScan, boutonAjouter, boutonRecherche;
     protected TextView nomText, codeText, emballageText;
     private ArrayList<String> poubelleJaune, poubelleVerte;
+    private SearchView searchView;
+    private ListView listView;
+    ArrayAdapter<String > adapter;
+
+    // Référence vers la database
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     FirebaseDatabase database = FirebaseDatabase.getInstance("https://androidapp-41f0d-default-rtdb.europe-west1.firebasedatabase.app");
     DatabaseReference databaseReferenceProduits = database.getReference().child("Produits");
 
-    SearchView searchView;
-    ListView listView;
-    ArrayAdapter<String > adapter;
 
+    // Création de l'activité
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // Initialisation des boutons + écouteur
         boutonScan = findViewById(R.id.buttonScan);
         boutonScan.setOnClickListener(this);
 
@@ -87,16 +72,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         boutonRecherche.setOnClickListener(this);
     }
 
+    // Actions lors d'un clic sur un bouton
     @Override
     public void onClick(View view) {
+        // Bouton ajouter un produit
         if (boutonAjouter.equals(view)) {
+            //Redirection vers l'activité d'ajout de produit
             Intent intent = new Intent(this, AjoutProduit.class);
             startActivity(intent);
+        // Bouton scanner un code
         } else if (boutonScan.equals(view)) {
             //Start QR Scanner
             scan();
         }
+        // Bouton rechercher un produit
         else if(boutonRecherche.equals(view)){
+            // Ouverture de la view pour la recherche
             showDialogSearch();
         }
     }
@@ -109,6 +100,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         intentIntegrator.initiateScan();
     }
 
+    // Informations sur le produit sous forme de BottomSheetView
     private void showDialogInfosProduit(Produit produit){
         Dialog dialog = new Dialog(this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -118,9 +110,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         ArrayList<String> emballageFiltreVerte = new ArrayList<>();
         ArrayList<String> emballageFiltreNoire = new ArrayList<>();
 
-        LinearLayout rescanLayout = dialog.findViewById(R.id.layoutReScan);
         LinearLayout backHomeLayout = dialog.findViewById(R.id.layoutBackHome);
-        LinearLayout ajoutProduit = dialog.findViewById(R.id.layoutAjout);
 
         nomText = dialog.findViewById(R.id.textNom);
         codeText = dialog.findViewById(R.id.textCode);
@@ -128,7 +118,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         nomText.setText(produit.getNom());
         codeText.setText(produit.getCode());
 
-
+        // Identification des RV sur le layout
         RecyclerView recyclerViewJaune = dialog.findViewById(R.id.recyclerViewPoubelleJaune);
         RecyclerView recyclerViewVerte = dialog.findViewById(R.id.recyclerViewPoubelleVerte);
         RecyclerView recyclerViewNoire = dialog.findViewById(R.id.recyclerViewPoubelleNoire);
@@ -153,15 +143,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setRecyclerViews(recyclerViewVerte,emballageFiltreVerte);
         setRecyclerViews(recyclerViewNoire,emballageFiltreNoire);
 
-
-        rescanLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Toast.makeText(MainActivity.this, "Rescan", Toast.LENGTH_SHORT).show();
-                scan();
-            }
-        });
-
+        // Bouton Retour à l'accueil
         backHomeLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -169,14 +151,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         });
 
-        ajoutProduit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this,AjoutProduit.class);
-                startActivity(intent);
-            }
-        });
-
+        // Paramétrage et affichage de la boite de dialogue
         dialog.show();
         dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
@@ -184,6 +159,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         dialog.getWindow().setGravity(Gravity.BOTTOM);
     }
 
+    // Recherche par nom d'un produit - BottomSheetView
     protected void showDialogSearch(){
         Dialog dialog = new Dialog(this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -196,16 +172,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         searchView.setIconified(false);
         listView = (ListView) dialog.findViewById(R.id.lv1);
 
+        // Ecouteur sur la zone de recherche
         searchView.setOnQueryTextListener (new SearchView.OnQueryTextListener() {
+
+            // Après appui sur validation de la recherche
             @Override
             public boolean onQueryTextSubmit(String query) {
                 return false;
             }
 
+            // Pendant qu'on écrit, en temps réel....
             @Override
             public boolean onQueryTextChange(String query) {
                 ArrayList<String> list = new ArrayList<>();
                 ArrayList<String> listFiltre = new ArrayList<>();
+
+                // Recherche dans la BD
+                // Listener sur un OnSucces = si on peut lire dans la BD
                 db.collection("Produits")
                         .get()
                         .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
@@ -214,45 +197,35 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                 for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
                                     Produit produit = documentSnapshot.toObject(Produit.class);
                                     list.add(produit.getNom().toLowerCase());
-                                    Collections.sort(list); //Ordre alphabétique
+                                    Collections.sort(list); //Tri par ordre alphabétique
                                 }
                                     for(int i=0;i<list.size();i++) {
                                         if(list.get(i).indexOf(query) != -1){
-                                            //listFiltre.add(list.get(i).substring(0,1).toUpperCase()+list.get(i).substring(1));
-                                            listFiltre.add(list.get(i));
+                                            // Affichage avec la majuscule, estétique
+                                            listFiltre.add(list.get(i).substring(0,1).toUpperCase()+list.get(i).substring(1));
                                         }
                                     }
                                     adapter = new ArrayAdapter<String>(dialog.getContext(), android.R.layout.simple_list_item_1, listFiltre);
                                     listView.setAdapter(adapter);
-                                    /*listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+                                    // Listener de clic sur un des items de la liste
+                                    listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                                         @Override
                                         public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                                            // Fermeture de la boite de recherche
                                             dialog.dismiss();
-                                            final InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                                            imm.hideSoftInputFromInputMethod(view.getWindowToken(), 0);
-                                            db.collection("Produits")
-                                                    .get()
-                                                    .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                                                        @Override
-                                                        public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                                                            Toast.makeText(getBaseContext(), list.get(i), Toast.LENGTH_SHORT).show();
-                                                            for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
-                                                                Produit produit = documentSnapshot.toObject(Produit.class);
-                                                                list.add(produit.getNom());
-                                                                if(list.get(i).indexOf(query) != -1){
-                                                                    showDialogInfosProduit(produit);
-                                                                }
-                                                            }
-                                                        }
-                                                    });
+
+                                            // Recherche du produit avec le nom, en fonction de l'item cliqué
+                                            searchProductName(listFiltre.get(i));
                                         }
-                                    });*/
+                                    });
                             }
                         });
                 return false;
             }
         });
 
+        // Paramétrage et affichage de la Dialog View
         dialog.show();
         dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
@@ -260,10 +233,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         dialog.getWindow().setGravity(Gravity.BOTTOM);
     }
 
+
+    // AlertBox au cas où le produit recherché n'existe pas
     private void showAlertBoxProduitInexistant(String codeLu){
         AlertDialog.Builder alert = new AlertDialog.Builder(this);
             alert.setTitle("Produit inexistant dans la base de données");
             alert.setMessage("Le produit n'existe pas encore dans la base de données. Souhaitez-vous l'ajouter maintenant ?");
+
+            // Si on appuie sur Oui, on lance l'activité AjoutProduit
             alert.setPositiveButton("Oui", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
@@ -277,9 +254,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 public void onClick(DialogInterface dialogInterface, int i) {
                 }
             });
+
+            // Affichage de la boite d'alerte
             alert.create().show();
     }
 
+    // Résultats du scan
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -292,14 +272,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             } else {
                 // Résultat non nul
                 CharSequence code = intentResult.getContents();
-                searchProduct(code.toString());
+
+                // Vers la fonction recherche par le code
+                searchProductCode(code.toString());
             }
         } else {
             super.onActivityResult(requestCode, resultCode, data);
         }
     }
 
-    public void searchProduct(String codeLu) {
+    //Recherche dans la base de données avec le code
+    public void searchProductCode(String codeLu) {
         db.collection("Produits")
                 .whereEqualTo("code", codeLu)
                 .get()
@@ -316,8 +299,27 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 });
     }
 
+    //Recherche dans la base de données avec le nom
+    public void searchProductName(String nom) {
+        db.collection("Produits")
+                .whereEqualTo("nom", nom)
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        Produit produit = new Produit();
+                        for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                            produit = documentSnapshot.toObject(Produit.class);
+                            showDialogInfosProduit(produit);
+                        }
+                        if(produit.getNom() == null) showAlertBoxProduitInexistant(nom);
+                    }
+                });
+    }
 
 
+
+    // Fonction de création des RV
     protected void setRecyclerViews(RecyclerView recyclerView, ArrayList<String> emballageFiltre){
         RVAdapterAfficheEmballages rvAdapterAfficheEmballages = new RVAdapterAfficheEmballages(emballageFiltre);
         recyclerView.setAdapter(rvAdapterAfficheEmballages);

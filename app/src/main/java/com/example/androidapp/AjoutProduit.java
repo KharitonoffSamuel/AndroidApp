@@ -57,10 +57,12 @@ public class AjoutProduit extends AppCompatActivity implements View.OnClickListe
         emballages.add("[Carton] Boite");
         emballages.add("[Carton] Brique");
         emballages.add("[Carton] Barquette");
+        emballages.add("[Carton] Autres");
         emballages.add("[Papier] Emballage");
         emballages.add("[Papier] Feuille");
 
         emballages.add("[Aluminium] Canette");
+        emballages.add("[Aluminium] Opercule");
         emballages.add("[Métal] Couvercle");
         emballages.add("[Métal] Boite de conserve");
         emballages.add("[Aérosol] Aérosol");
@@ -70,6 +72,8 @@ public class AjoutProduit extends AppCompatActivity implements View.OnClickListe
         emballages.add("[Verre] Bouteille");
 
         emballages.add("Bouchon de liège");
+        emballages.add("Emballage alimentaire non recyclable");
+        emballages.add("Autre emballage non recyclable");
     }
 
     @Override
@@ -103,6 +107,8 @@ public class AjoutProduit extends AppCompatActivity implements View.OnClickListe
             intentIntegrator.setOrientationLocked(false);
             intentIntegrator.initiateScan();
         }
+
+        // Si on appuie sur valider, on va envoyer les infos sur la database
         else if (boutonValider.equals(view)) {
             // Si tous les champs ont été remplis
             if(editTextNom.getText().toString().length() != 0 && editTextCode.getText().toString().length() != 0) {
@@ -110,6 +116,7 @@ public class AjoutProduit extends AppCompatActivity implements View.OnClickListe
                 produit.setNom(editTextNom.getText().toString());
                 produit.setCode(editTextCode.getText().toString());
 
+                // Envoi dans la base de données
                 db.collection("Produits")
                         .add(produit)
                         .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
@@ -131,6 +138,7 @@ public class AjoutProduit extends AppCompatActivity implements View.OnClickListe
                 startActivity(intent);
             }
             else{
+                // Alerte en cas de champs vides
                 showAlertBoxChampsVides();
             }
         }
@@ -156,6 +164,7 @@ public class AjoutProduit extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+    // On met à jour le tableau des matières en temps réel
     @Override
     public void onCheckboxChange(ArrayList<String> arrayList) {
         produit.setMatiere(arrayList);
@@ -166,11 +175,11 @@ public class AjoutProduit extends AppCompatActivity implements View.OnClickListe
         initData();
         rvAdapter = new RVAdapter(this.emballages,this,this::onCheckboxChange);
         recyclerView.setAdapter(rvAdapter);
-        //recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
         recyclerView.hasFixedSize();
     }
 
+    // Fonction d'affichage de l'alerte en cas de champs vides lors de la création de produit
     private void showAlertBoxChampsVides(){
         AlertDialog.Builder alert = new AlertDialog.Builder(this);
         alert.setTitle("Champs vides");
@@ -180,11 +189,6 @@ public class AjoutProduit extends AppCompatActivity implements View.OnClickListe
             public void onClick(DialogInterface dialogInterface, int i) {
             }
         });
-        /*alert.setNegativeButton("Annuler", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-            }
-        });*/
         alert.create().show();
     }
 }
