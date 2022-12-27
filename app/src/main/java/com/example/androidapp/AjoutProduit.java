@@ -101,10 +101,12 @@ public class AjoutProduit extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View view) {
+
+        // Si on appuie sur le bouton scanner, on envoie vers l'activité du scan
         if (boutonScannerCode.equals(view)) {
             IntentIntegrator intentIntegrator = new IntentIntegrator(this);
             intentIntegrator.setPrompt("Scan a barcode or QR Code");
-            intentIntegrator.setOrientationLocked(false);
+            intentIntegrator.setOrientationLocked(false); // Format portrait bloqué
             intentIntegrator.initiateScan();
         }
 
